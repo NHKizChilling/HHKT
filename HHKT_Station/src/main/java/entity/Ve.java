@@ -1,27 +1,39 @@
 package entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Ve {
     @Id
     @ColumnDefault("[dbo].[auto_idve]()")
-    @Column(name = "ma_ve", nullable = false, length = 14)
+    @Column(name = "ma_ve", nullable = false, columnDefinition = "char(14)")
     private String maVe;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ma_kh", nullable = false)
     private KhachHang khachHang;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumns({
+            @JoinColumn(name = "ma_cho", referencedColumnName = "ma_cho", nullable = false),
+            @JoinColumn(name = "ma_lich_trinh", referencedColumnName = "ma_lich_trinh", nullable = false)
+    })
     private ChiTietLichTrinh chiTietLichTrinh;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "ma_loai_ve", nullable = false)
     private LoaiVe loaiVe;
 
@@ -42,97 +54,10 @@ public class Ve {
 
     @ColumnDefault("0")
     @Column(name = "khu_hoi", nullable = false)
-    private Boolean khuHoi = false;
-
-    public Ve() {
-    }
+    private boolean khuHoi = false;
 
     public Ve(String maVe) {
         this.maVe = maVe;
-    }
-
-    public Ve(String maVe, KhachHang khachHang, ChiTietLichTrinh chiTietLichTrinh, LoaiVe loaiVe, String tenKH, String soCCCD, LocalDate ngaySinh, String tinhTrangVe, Boolean khuHoi) {
-        this.maVe = maVe;
-        this.khachHang = khachHang;
-        this.chiTietLichTrinh = chiTietLichTrinh;
-        this.loaiVe = loaiVe;
-        this.tenKH = tenKH;
-        this.soCCCD = soCCCD;
-        this.ngaySinh = ngaySinh;
-        this.tinhTrangVe = tinhTrangVe;
-        this.khuHoi = khuHoi;
-    }
-
-    public KhachHang getKhachHang() {
-        return khachHang;
-    }
-
-    public void setKhachHang(KhachHang khachHang) {
-        this.khachHang = khachHang;
-    }
-
-    public LoaiVe getLoaiVe() {
-        return loaiVe;
-    }
-
-    public void setLoaiVe(LoaiVe loaiVe) {
-        this.loaiVe = loaiVe;
-    }
-
-    public String getMaVe() {
-        return maVe;
-    }
-
-    public void setMaVe(String maVe) {
-        this.maVe = maVe;
-    }
-
-    public ChiTietLichTrinh getChiTietLichTrinh() {
-        return chiTietLichTrinh;
-    }
-
-    public void setChiTietLichTrinh(ChiTietLichTrinh chiTietLichTrinh) {
-        this.chiTietLichTrinh = chiTietLichTrinh;
-    }
-
-    public String getTenKH() {
-        return tenKH;
-    }
-
-    public void setTenKH(String tenKH) {
-        this.tenKH = tenKH;
-    }
-
-    public String getSoCCCD() {
-        return soCCCD;
-    }
-
-    public void setSoCCCD(String soCCCD) {
-        this.soCCCD = soCCCD;
-    }
-
-    public LocalDate getNgaySinh() {
-        return ngaySinh;
-    }
-
-    public void setNgaySinh(LocalDate ngaySinh) {
-        this.ngaySinh = ngaySinh;
-    }
-
-    public String getTinhTrangVe() {
-        return tinhTrangVe;
-    }
-
-    public void setTinhTrangVe(String tinhTrangVe) {
-        this.tinhTrangVe = tinhTrangVe;
-    }
-
-    public Boolean getKhuHoi() {
-        return khuHoi;
-    }
-
-    public void setKhuHoi(Boolean khuHoi) {
-        this.khuHoi = khuHoi;
     }
 
     @Override

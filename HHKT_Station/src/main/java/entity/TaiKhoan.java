@@ -1,11 +1,19 @@
 package entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
 import java.util.Objects;
 
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class TaiKhoan {
     @Id
@@ -21,39 +29,6 @@ public class TaiKhoan {
     @ColumnDefault("N'Đang hoạt động'")
     @Column(name = "trang_thai_tk", length = 20)
     private String trangThaiTK;
-
-    public TaiKhoan() {
-    }
-
-    public TaiKhoan(NhanVien nhanVien, String matKhau, String trangThaiTK) {
-        this.nhanVien = nhanVien;
-        this.matKhau = matKhau;
-        this.trangThaiTK = trangThaiTK;
-    }
-
-    public NhanVien getNhanVien() {
-        return nhanVien;
-    }
-
-    public void setNhanVien(NhanVien nhanVien) {
-        this.nhanVien = nhanVien;
-    }
-
-    public String getMatKhau() {
-        return matKhau;
-    }
-
-    public void setMatKhau(String matKhau) {
-        this.matKhau = matKhau;
-    }
-
-    public String getTrangThaiTK() {
-        return trangThaiTK;
-    }
-
-    public void setTrangThaiTK(String trangThaiTK) {
-        this.trangThaiTK = trangThaiTK;
-    }
 
     @Override
     public boolean equals(Object o) {

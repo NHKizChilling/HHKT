@@ -62,7 +62,7 @@ public class HoaDon_DAO {
                     .setParameter(1, hoaDon.getNhanVien().getMaNV())
                     .setParameter(2, hoaDon.getKhachHang().getMaKH())
                     .setParameter(3, Timestamp.valueOf(hoaDon.getNgayLapHoaDon()))
-                    .setParameter(4, hoaDon.getTrangThai())
+                    .setParameter(4, hoaDon.isTrangThai())
                     .executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

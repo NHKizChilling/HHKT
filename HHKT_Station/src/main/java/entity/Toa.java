@@ -1,9 +1,17 @@
 package entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Objects;
 
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Toa {
     @Id
@@ -11,7 +19,7 @@ public class Toa {
     private String maToa;
 
     @Column(name = "stt_toa", columnDefinition = "tinyint not null")
-    private Short sttToa;
+    private int sttToa;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "so_hieu_tau", nullable = false)
@@ -21,50 +29,8 @@ public class Toa {
     @JoinColumn(name = "ma_loai_toa", nullable = false)
     private LoaiToa loaiToa;
 
-    public Toa() {
-    }
-
     public Toa(String maToa) {
         this.maToa = maToa;
-    }
-
-    public Toa(String maToa, Short sttToa, ChuyenTau soHieuTau, LoaiToa loaiToa) {
-        this.maToa = maToa;
-        this.sttToa = sttToa;
-        this.soHieuTau = soHieuTau;
-        this.loaiToa = loaiToa;
-    }
-
-    public String getMaToa() {
-        return maToa;
-    }
-
-    public void setMaToa(String maToa) {
-        this.maToa = maToa;
-    }
-
-    public Short getSttToa() {
-        return sttToa;
-    }
-
-    public void setSttToa(Short sttToa) {
-        this.sttToa = sttToa;
-    }
-
-    public ChuyenTau getSoHieuTau() {
-        return soHieuTau;
-    }
-
-    public void setSoHieuTau(ChuyenTau soHieuTau) {
-        this.soHieuTau = soHieuTau;
-    }
-
-    public LoaiToa getLoaiToa() {
-        return loaiToa;
-    }
-
-    public void setLoaiToa(LoaiToa loaiToa) {
-        this.loaiToa = loaiToa;
     }
 
     @Override

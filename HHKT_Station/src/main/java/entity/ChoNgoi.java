@@ -1,84 +1,41 @@
 package entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.util.Objects;
 
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class ChoNgoi {
     @Id
     @Column(name = "ma_cho", nullable = false, length = 15)
     private String maCho;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ma_toa", nullable = false)
     private entity.Toa toa;
 
     @Column(name = "stt_cho", columnDefinition = "tinyint not null")
-    private Short sttCho;
+    private int sttCho;
 
     @ColumnDefault("1")
     @Column(name = "tang", columnDefinition = "tinyint")
-    private Short tang;
+    private int tang;
 
     @ColumnDefault("1")
     @Column(name = "khoang", columnDefinition = "tinyint")
-    private Short khoang;
-
-    public ChoNgoi() {
-    }
+    private int khoang;
 
     public ChoNgoi(String maCho) {
         this.maCho = maCho;
-    }
-
-    public ChoNgoi(String maCho, entity.Toa toa, Short sttCho, Short tang, Short khoang) {
-        this.maCho = maCho;
-        this.toa = toa;
-        this.sttCho = sttCho;
-        this.tang = tang;
-        this.khoang = khoang;
-    }
-
-    public String getMaCho() {
-        return maCho;
-    }
-
-    public void setMaCho(String maCho) {
-        this.maCho = maCho;
-    }
-
-    public entity.Toa getToa() {
-        return toa;
-    }
-
-    public void setToa(entity.Toa toa) {
-        this.toa = toa;
-    }
-
-    public Short getSttCho() {
-        return sttCho;
-    }
-
-    public void setSttCho(Short sttCho) {
-        this.sttCho = sttCho;
-    }
-
-    public Short getTang() {
-        return tang;
-    }
-
-    public void setTang(Short tang) {
-        this.tang = tang;
-    }
-
-    public Short getKhoang() {
-        return khoang;
-    }
-
-    public void setKhoang(Short khoang) {
-        this.khoang = khoang;
     }
 
     @Override

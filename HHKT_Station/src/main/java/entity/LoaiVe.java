@@ -3,10 +3,18 @@ package entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
 import java.util.Objects;
 
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class LoaiVe {
     @Id
@@ -18,43 +26,10 @@ public class LoaiVe {
     private String tenLoaiVe;
 
     @Column(name = "muc_giam_gia", nullable = false)
-    private Double mucGiamGia;
-
-    public LoaiVe() {
-    }
+    private float mucGiamGia;
 
     public LoaiVe(String maLoaiVe) {
         this.maLoaiVe = maLoaiVe;
-    }
-
-    public LoaiVe(String maLoaiVe, String tenLoaiVe, Double mucGiamGia) {
-        this.maLoaiVe = maLoaiVe;
-        this.tenLoaiVe = tenLoaiVe;
-        this.mucGiamGia = mucGiamGia;
-    }
-    
-    public String getMaLoaiVe() {
-        return maLoaiVe;
-    }
-
-    public void setMaLoaiVe(String maLoaiVe) {
-        this.maLoaiVe = maLoaiVe;
-    }
-
-    public String getTenLoaiVe() {
-        return tenLoaiVe;
-    }
-
-    public void setTenLoaiVe(String tenLoaiVe) {
-        this.tenLoaiVe = tenLoaiVe;
-    }
-
-    public Double getMucGiamGia() {
-        return mucGiamGia;
-    }
-
-    public void setMucGiamGia(Double mucGiamGia) {
-        this.mucGiamGia = mucGiamGia;
     }
 
     @Override

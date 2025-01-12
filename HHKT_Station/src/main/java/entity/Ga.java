@@ -1,11 +1,19 @@
 package entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
 import java.util.Objects;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "Ga", uniqueConstraints = {
         @UniqueConstraint(name = "UQ_ten_ga", columnNames = {"ten_ga"})
 })
@@ -23,52 +31,10 @@ public class Ga {
     private String viTri;
 
     @Column(name = "khoang_cach", nullable = false)
-    private Short khoangCach;
-
-    public Ga() {
-    }
+    private int khoangCach;
 
     public Ga(String maGa) {
         this.maGa = maGa;
-    }
-
-    public Ga(String maGa, String tenGa, String viTri, Short khoangCach) {
-        this.maGa = maGa;
-        this.tenGa = tenGa;
-        this.viTri = viTri;
-        this.khoangCach = khoangCach;
-    }
-
-    public String getMaGa() {
-        return maGa;
-    }
-
-    public void setMaGa(String maGa) {
-        this.maGa = maGa;
-    }
-
-    public String getTenGa() {
-        return tenGa;
-    }
-
-    public void setTenGa(String tenGa) {
-        this.tenGa = tenGa;
-    }
-
-    public String getViTri() {
-        return viTri;
-    }
-
-    public void setViTri(String viTri) {
-        this.viTri = viTri;
-    }
-
-    public Short getKhoangCach() {
-        return khoangCach;
-    }
-
-    public void setKhoangCach(Short khoangCach) {
-        this.khoangCach = khoangCach;
     }
 
     @Override

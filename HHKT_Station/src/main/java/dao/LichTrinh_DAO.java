@@ -85,15 +85,14 @@ public class LichTrinh_DAO {
 
     public boolean updateInfo(LichTrinh lichTrinh) {
         return executeTransaction(() -> {
-            String sql = "UPDATE LichTrinh SET ma_ga_di = ?, ma_ga_den = ?, thoi_gian_khoi_hanh = ?, thoi_gian_den = ?, gia_ve = ?, trang_thai = ? WHERE ma_lich_trinh = ?";
+            String sql = "UPDATE LichTrinh SET ma_ga_di = ?, ma_ga_den = ?, thoi_gian_khoi_hanh = ?, thoi_gian_du_kien_den = ?, trang_thai = ? WHERE ma_lich_trinh = ?";
             em.createNativeQuery(sql)
                     .setParameter(1, lichTrinh.getGaDi().getMaGa())
                     .setParameter(2, lichTrinh.getGaDen().getMaGa())
                     .setParameter(3, Timestamp.valueOf(lichTrinh.getThoiGianKhoiHanh()))
-                    .setParameter(4, Timestamp.valueOf(lichTrinh.getThoiGianDen()))
-                    .setParameter(5, lichTrinh.getGiaVe())
-                    .setParameter(6, lichTrinh.isTrangThai())
-                    .setParameter(7, lichTrinh.getMaLichTrinh())
+                    .setParameter(4, Timestamp.valueOf(lichTrinh.getThoiGianDuKienDen()))
+                    .setParameter(5, lichTrinh.isTrangThai())
+                    .setParameter(6, lichTrinh.getMaLichTrinh())
                     .executeUpdate();
         });
     }

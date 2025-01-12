@@ -3,10 +3,18 @@ package entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
 import java.util.Objects;
 
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class LoaiTau {
     @Id
@@ -17,32 +25,8 @@ public class LoaiTau {
     @Column(name = "ten_loai_tau", nullable = false, length = 30)
     private String tenLoaiTau;
 
-    public LoaiTau() {
-    }
-
     public LoaiTau(String maLoaiTau) {
         this.maLoaiTau = maLoaiTau;
-    }
-
-    public LoaiTau(String maLoaiTau, String tenLoaiTau) {
-        this.maLoaiTau = maLoaiTau;
-        this.tenLoaiTau = tenLoaiTau;
-    }
-
-    public String getMaLoaiTau() {
-        return maLoaiTau;
-    }
-
-    public void setMaLoaiTau(String maLoaiTau) {
-        this.maLoaiTau = maLoaiTau;
-    }
-
-    public String getTenLoaiTau() {
-        return tenLoaiTau;
-    }
-
-    public void setTenLoaiTau(String tenLoaiTau) {
-        this.tenLoaiTau = tenLoaiTau;
     }
 
     @Override

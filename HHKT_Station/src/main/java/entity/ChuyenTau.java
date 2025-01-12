@@ -1,9 +1,17 @@
 package entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Objects;
 
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class ChuyenTau {
     @Id
@@ -14,32 +22,8 @@ public class ChuyenTau {
     @JoinColumn(name = "ma_loai_tau", nullable = false)
     private entity.LoaiTau loaiTau;
 
-    public ChuyenTau() {
-    }
-
     public ChuyenTau(String soHieuTau) {
         this.soHieuTau = soHieuTau;
-    }
-
-    public ChuyenTau(String soHieuTau, LoaiTau loaiTau) {
-        this.soHieuTau = soHieuTau;
-        this.loaiTau = loaiTau;
-    }
-
-    public String getSoHieuTau() {
-        return soHieuTau;
-    }
-
-    public void setSoHieuTau(String soHieuTau) {
-        this.soHieuTau = soHieuTau;
-    }
-
-    public LoaiTau getLoaiTau() {
-        return loaiTau;
-    }
-
-    public void setLoaiTau(LoaiTau loaiTau) {
-        this.loaiTau = loaiTau;
     }
 
     @Override
