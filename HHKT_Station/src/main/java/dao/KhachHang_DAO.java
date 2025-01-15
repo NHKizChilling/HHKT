@@ -64,6 +64,10 @@ public class KhachHang_DAO {
             return false;
         }
     }
+
+    public KhachHang getKhachHang(String maKH) {
+        return em.find(KhachHang.class, maKH);
+    }
 }
 
 
