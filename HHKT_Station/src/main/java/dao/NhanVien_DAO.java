@@ -66,4 +66,14 @@ public class NhanVien_DAO {
             return false;
         }
     }
+
+    public NhanVien getNhanVienTheoTen(String tenNV) {
+        String sql = "Select * from NhanVien where ten_nv = ?";
+        return (NhanVien) em.createNativeQuery(sql, NhanVien.class).setParameter(1, tenNV).getSingleResult();
+    }
+
+    public NhanVien getNhanVienTheoSDT(String sdt) {
+        String sql = "Select * from NhanVien where sdt = ?";
+        return (NhanVien) em.createNativeQuery(sql, NhanVien.class).setParameter(1, sdt).getSingleResult();
+    }
 }
