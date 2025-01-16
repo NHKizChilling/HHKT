@@ -8,7 +8,6 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 @Setter
@@ -35,10 +34,44 @@ public class ChiTietHoaDon {
     @Column(name = "gia_giam", nullable = false, columnDefinition = "money")
     private double giaGiam;
 
+    private static final double PHI_DICH_VU = 2000;
+
     public ChiTietHoaDon(HoaDon hoaDon, Ve ve) {
         this.hoaDon = hoaDon;
         this.ve = ve;
     }
+
+    public void tinhGiaVe() {
+        double giaVe = 0;
+        double giaCho = ve.getChiTietLichTrinh().getGiaCho();
+        LoaiVe loaiVe = ve.getLoaiVe();
+        if(!loaiVe.getMaLoaiVe().equals("VNL")) {
+            giaVe = giaCho * (1 - loaiVe.getMucGiamGia()) + PHI_DICH_VU;
+        } else {
+            if (ve.isKhuHoi()) {
+                giaVe = giaCho * 0.9 + PHI_DICH_VU;
+            } else {
+                giaVe = giaCho + PHI_DICH_VU;
+            }
+        }
+        this.giaVe = Math.round(giaVe/1000) * 1000;
+    }
+
+    public void tinhGiaGiam() {
+        double giaGiam = 0;
+        double giaCho = ve.getChiTietLichTrinh().getGiaCho();
+        LoaiVe loaiVe = ve.getLoaiVe();
+
+        if(!loaiVe.getMaLoaiVe().equals("VNL")) {
+            giaGiam = giaCho * loaiVe.getMucGiamGia();
+        } else {
+            if (ve.isKhuHoi()) {
+                giaGiam = giaCho * 0.1;
+            }
+        }
+        this.giaGiam = Math.round(giaGiam/1000) * 1000;
+    }
+
 
     @Override
     public boolean equals(Object o) {

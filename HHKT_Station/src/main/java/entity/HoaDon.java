@@ -9,6 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Objects;
 
 @Setter
@@ -50,6 +51,32 @@ public class HoaDon {
     public HoaDon(String maHD) {
         this.maHD = maHD;
     }
+
+    public void tinhTongTien(ArrayList<ChiTietHoaDon> dsChiTietHoaDon) {
+        double tongTien = 0;
+        double phiDichVu = dsChiTietHoaDon.size() * 2000;
+        double tongKM = 0;
+
+        for (ChiTietHoaDon chiTietHoaDon : dsChiTietHoaDon) {
+            tongTien += (chiTietHoaDon.getGiaVe() - 2000 );
+            tongKM += (chiTietHoaDon.getGiaVe() - 2000) * khuyenMai.getMucKM();
+        }
+        tongTien -= tongKM;
+        tongTien *= 1.1;
+        tongTien += phiDichVu;
+        this.tongTien = tongTien;
+    }
+
+    public void tinhTongGiamGia(ArrayList<ChiTietHoaDon> dsChiTietHoaDon) {
+        double tongGiamGia = 0;
+        double tongKM = 0;
+        for (ChiTietHoaDon chiTietHoaDon : dsChiTietHoaDon) {
+            tongGiamGia += chiTietHoaDon.getGiaGiam();
+            tongKM += (chiTietHoaDon.getGiaVe() - 2000) * khuyenMai.getMucKM();
+        }
+        this.tongGiamGia = tongGiamGia + tongKM;
+    }
+
 
     @Override
     public boolean equals(Object o) {
