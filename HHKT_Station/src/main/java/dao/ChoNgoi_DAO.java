@@ -11,9 +11,9 @@ public class ChoNgoi_DAO {
     private final EntityManager em;
     private final EntityTransaction transaction;
 
-    public ChoNgoi_DAO(EntityManager em, EntityTransaction transaction) {
+    public ChoNgoi_DAO(EntityManager em) {
         this.em = em;
-        this.transaction = transaction;
+        this.transaction = em.getTransaction();
     }
 
     public ArrayList<ChoNgoi> getAllChoNgoi() {

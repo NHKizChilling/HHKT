@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -16,13 +18,15 @@ import java.util.Objects;
 @Entity
 public class ChiTietHoaDon {
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "ma_hd", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private entity.HoaDon hoaDon;
 
     @Id
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "ma_ve", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private entity.Ve ve;
 
     @Column(name = "gia_ve", nullable = false, columnDefinition = "money")

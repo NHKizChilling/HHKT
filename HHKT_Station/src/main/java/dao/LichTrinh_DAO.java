@@ -63,7 +63,7 @@ public class LichTrinh_DAO {
     public boolean updateTrangThaiChuyenTau(String maLichTrinh, boolean trangThai) {
         return executeTransaction(() -> {
             String sql = "UPDATE LichTrinh SET trang_thai = ? WHERE ma_lich_trinh = ?";
-            em.createNativeQuery(sql)
+            em.createNativeQuery(sql, LichTrinh.class)
                     .setParameter(1, trangThai)
                     .setParameter(2, maLichTrinh)
                     .executeUpdate();

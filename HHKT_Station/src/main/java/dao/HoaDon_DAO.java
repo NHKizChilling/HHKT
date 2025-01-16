@@ -81,7 +81,8 @@ public class HoaDon_DAO {
     }
 
     public boolean delete(HoaDon hoaDon) {
-        return executeTransaction(() -> em.remove(hoaDon));
+        HoaDon hd = em.find(HoaDon.class, hoaDon.getMaHD());
+        return executeTransaction(() -> em.remove(hd));
     }
 
     public ArrayList<HoaDon> getDSHDTheoNam(String nam) {
