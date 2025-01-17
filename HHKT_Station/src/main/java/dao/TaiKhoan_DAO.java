@@ -1,5 +1,6 @@
 package dao;
 
+import entity.NhanVien;
 import entity.TaiKhoan;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -8,11 +9,9 @@ import java.util.ArrayList;
 
 public class TaiKhoan_DAO {
     private final EntityManager em;
-    private final EntityTransaction transaction;
 
     public TaiKhoan_DAO(EntityManager em) {
         this.em = em;
-        this.transaction = em.getTransaction();
     }
 
     public ArrayList<TaiKhoan> getAllTaiKhoan() {
@@ -24,31 +23,40 @@ public class TaiKhoan_DAO {
         return executeTransaction(() -> em.persist(tk));
     }
 
-    public boolean delete(String maNhanVien, String trangThaiTK) {
-        return executeTransaction(() -> {
-            TaiKhoan tk = getTaiKhoanTheoMaNV(maNhanVien);
-            tk.setTrangThaiTK(trangThaiTK);
-            em.merge(tk);
-        });
+//    public boolean delete(String maNhanVien, String trangThaiTK) {
+//        return executeTransaction(() -> {
+//            TaiKhoan tk = getTaiKhoanTheoMaNV(maNhanVien);
+//            tk.setTrangThaiTK(trangThaiTK);
+//            em.merge(tk);
+//        });
+//    }
+
+    public boolean delete(String maNhanVien) {
+        return executeTransaction(() -> em.remove(getTaiKhoanTheoMaNV(maNhanVien)));
     }
 
     public boolean update(TaiKhoan tk) {
         return executeTransaction(() -> em.merge(tk));
     }
 
-    public boolean doiMatKhau(String maNhanVien, String matKhauMoi) {
+    public boolean doiMatKhau(String maNv, String matKhauMoi) {
         return executeTransaction(() -> {
-            TaiKhoan tk = getTaiKhoanTheoMaNV(maNhanVien);
+            TaiKhoan tk = em.createQuery("SELECT tk FROM TaiKhoan tk WHERE tk.nhanVien.maNV = :maNV", TaiKhoan.class)
+                    .setParameter("maNV", maNv)
+                    .getSingleResult();
             tk.setMatKhau(matKhauMoi);
             em.merge(tk);
         });
     }
 
     public TaiKhoan getTaiKhoanTheoMaNV(String maNhanVien) {
-        return em.find(TaiKhoan.class, maNhanVien);
+        return em.createQuery("SELECT tk FROM TaiKhoan tk WHERE tk.nhanVien.maNV = :maNV", TaiKhoan.class)
+                .setParameter("maNV", maNhanVien)
+                .getSingleResult();
     }
 
     private boolean executeTransaction(Runnable action) {
+        EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
             action.run();

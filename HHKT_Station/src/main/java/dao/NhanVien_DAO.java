@@ -26,6 +26,10 @@ public class NhanVien_DAO {
         return executeTransaction(() -> em.persist(nv));
     }
 
+    public boolean delete(String maNV) {
+        return executeTransaction(() -> em.remove(getNhanVien(maNV)));
+    }
+
     public boolean updateTinhTrangCV(String maNV, String tinhTrangCV) {
         return executeTransaction(() -> {
             NhanVien nv = getNhanVien(maNV);
