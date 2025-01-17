@@ -21,9 +21,12 @@ public class CT_HoaDon_DAO {
     }
 
     public boolean create(ChiTietHoaDon cthd) {
+        transaction.begin();
         try {
             em.persist(cthd);
+            transaction.commit();
         } catch (Exception e) {
+            transaction.rollback();
             e.printStackTrace();
             return false;
         }

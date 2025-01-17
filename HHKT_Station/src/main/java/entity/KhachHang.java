@@ -21,7 +21,7 @@ import java.util.Objects;
 })
 public class KhachHang {
     @Id
-    @ColumnDefault("[dbo].[auto_idkh]()")
+//    @ColumnDefault("[dbo].[auto_idkh]()")
     @Column(name = "ma_kh", nullable = false, columnDefinition = "char(10)")
     private String maKH;
 
@@ -40,6 +40,13 @@ public class KhachHang {
 
     public KhachHang(String maKH) {
         this.maKH = maKH;
+    }
+
+    public KhachHang(String tenKH, String soCCCD, String sdt, String email) {
+        this.tenKH = tenKH;
+        this.soCCCD = soCCCD;
+        this.sdt = sdt;
+        this.email = email;
     }
 
     @Override

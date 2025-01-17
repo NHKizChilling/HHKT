@@ -18,9 +18,9 @@ public class KhachhangService {
         ve_DAO = new Ve_DAO(em);
     }
 
-    public boolean addKhachHang(KhachHang kh) {
-        return khachHang_DAO.create(kh);
-    }
+//    public boolean addKhachHang(KhachHang kh) {
+//        return khachHang_DAO.create(kh);
+//    }
 
     public KhachHang getKhachHangTheoId(String maKH) {
         return khachHang_DAO.getKhachHang(maKH);
