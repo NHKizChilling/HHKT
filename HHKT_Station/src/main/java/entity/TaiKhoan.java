@@ -21,7 +21,6 @@ public class TaiKhoan {
     @JoinColumn(name = "ma_nv", nullable = false)
     private NhanVien nhanVien;
 
-    @Id
     @Column(name = "mat_khau", nullable = false, length = 50)
     private String matKhau;
 

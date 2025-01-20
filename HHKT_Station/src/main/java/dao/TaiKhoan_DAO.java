@@ -44,8 +44,9 @@ public class TaiKhoan_DAO {
             TaiKhoan tk = em.createQuery("SELECT tk FROM TaiKhoan tk WHERE tk.nhanVien.maNV = :maNV", TaiKhoan.class)
                     .setParameter("maNV", maNv)
                     .getSingleResult();
-            tk.setMatKhau(matKhauMoi);
-            em.merge(tk);
+            if (tk != null) {
+                tk.setMatKhau(matKhauMoi);
+            }
         });
     }
 
