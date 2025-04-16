@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -16,7 +17,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Ve {
+public class Ve implements Serializable {
     @Id
     @ColumnDefault("[dbo].[auto_idve]()")
     @Column(name = "ma_ve", nullable = false, columnDefinition = "char(14)")

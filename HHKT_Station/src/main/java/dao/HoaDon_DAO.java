@@ -3,77 +3,107 @@ package dao;
 import entity.HoaDon;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import util.JPAUtil;
 
-import java.sql.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.List;
 
 public class HoaDon_DAO {
     private final EntityManager em;
-    private final EntityTransaction transaction;
 
-    public HoaDon_DAO(EntityManager em) {
-        this.em = em;
-        this.transaction = em.getTransaction();
+    public HoaDon_DAO() {
+        this.em = JPAUtil.getEntityManager();
     }
 
-    public ArrayList<HoaDon> getAllHoaDon() {
-        String sql = "Select * from HoaDon";
-        return (ArrayList<HoaDon>) em.createNativeQuery(sql, HoaDon.class).getResultList();
+    public List<HoaDon> getAllHoaDon() {
+
+        return em.createQuery("from HoaDon ", HoaDon.class).getResultList();
     }
 
     public HoaDon getHoaDonTheoMa(String maHoaDon) {
         return em.find(HoaDon.class, maHoaDon);
     }
 
-    public ArrayList<HoaDon> getHoaDonTheoNV(String maNV, LocalDateTime ngayLap) {
-        String sql = "Select * from HoaDon where ma_nv = ? and YEAR(ngay_lap_hoa_don) = ? and MONTH(ngay_lap_hoa_don) = ? and DAY(ngay_lap_hoa_don) = ?";
-        return (ArrayList<HoaDon>)  em.createNativeQuery(sql, HoaDon.class)
-                .setParameter(1, maNV)
-                .setParameter(2, ngayLap.getYear())
-                .setParameter(3, ngayLap.getMonthValue())
-                .setParameter(4, ngayLap.getDayOfMonth())
+    public List<HoaDon> getHoaDonTheoNV(String maNV, LocalDate ngayLap) {
+        String sql = "from HoaDon where nhanVien.maNV = :maNV and YEAR(ngayLapHoaDon) = :nam and MONTH(ngayLapHoaDon) = :thang and DAY(ngayLapHoaDon) = :ngay";
+        return em.createQuery(sql, HoaDon.class)
+                .setParameter("maNV", maNV)
+                .setParameter("nam", ngayLap.getYear())
+                .setParameter("thang", ngayLap.getMonthValue())
+                .setParameter("ngay", ngayLap.getDayOfMonth())
                 .getResultList();
     }
 
-    public ArrayList<HoaDon> getHoaDonTheoKH(String maKH) {
-        String sql = "Select * from HoaDon where ma_kh = ?";
-        return (ArrayList<HoaDon>) em.createNativeQuery(sql, HoaDon.class).setParameter(1, maKH).getResultList();
+    public List<HoaDon> getHoaDonTheoKH(String maKH) {
+        String sql = "from HoaDon where khachHang.maKH = :maKH";
+        return em.createQuery(sql, HoaDon.class).setParameter("maKH", maKH).getResultList();
     }
 
-    public ArrayList<HoaDon> getHoaDonTheoNV(String maNV) {
-        String sql = "Select * from HoaDon where ma_nv = ?";
-        return (ArrayList<HoaDon>) em.createNativeQuery(sql, HoaDon.class).setParameter(1, maNV).getResultList();
+    public List<HoaDon> getHoaDonTheoNV(String maNV) {
+        String sql = "from HoaDon where nhanVien.maNV = :maNV";
+        return em.createQuery(sql, HoaDon.class).setParameter("maNV", maNV).getResultList();
     }
 
     public HoaDon getHoaDonVuaTao() {
-        String sql = "Select * from HoaDon where trang_thai = 0 and tong_tien = 0";
-        return (HoaDon) em.createNativeQuery(sql, HoaDon.class).getSingleResult();
+        String sql = "from HoaDon where trangThai = false and tongTien = 0";
+        return em.createQuery(sql, HoaDon.class).getSingleResult();
     }
 
     public boolean create(HoaDon hoaDon) {
-        return executeTransaction(() -> em.persist(hoaDon));
-    }
-
-    public boolean createTempInvoice(HoaDon hoaDon) {
-        String sql = "insert into HoaDon(ma_nv, ma_kh, ngay_lap_hoa_don, tong_tien, tong_giam_gia, trang_thai) values(?,?,?,0,0,?)";
+        String sql = "INSERT INTO HoaDon(ma_nv, ma_kh, ngay_lap_hoa_don, tong_tien, tong_giam_gia, ma_km, trang_thai) " +
+                "VALUES(?, ?, ?, ?, ?, ?, ?)";
         try {
+            em.getTransaction().begin();
+
             em.createNativeQuery(sql)
                     .setParameter(1, hoaDon.getNhanVien().getMaNV())
                     .setParameter(2, hoaDon.getKhachHang().getMaKH())
-                    .setParameter(3, Timestamp.valueOf(hoaDon.getNgayLapHoaDon()))
-                    .setParameter(4, hoaDon.isTrangThai())
+                    .setParameter(3, hoaDon.getNgayLapHoaDon())
+                    .setParameter(4, hoaDon.getTongTien())
+                    .setParameter(5, hoaDon.getTongGiamGia())
+                    .setParameter(6, hoaDon.getKhuyenMai().getMaKM())
+                    .setParameter(7, hoaDon.isTrangThai())
                     .executeUpdate();
+
+            em.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
             return false;
         }
         return true;
     }
 
-    public ArrayList<HoaDon> getDSHDLuuTam() {
-        String sql = "Select * from HoaDon where trang_thai = 0 and tong_tien != 0";
-        return (ArrayList<HoaDon>) em.createNativeQuery(sql, HoaDon.class).getResultList();
+    public boolean createTempInvoice(HoaDon hoaDon) {
+        String sql = "INSERT INTO HoaDon(ma_nv, ma_kh, ngay_lap_hoa_don, tong_tien, tong_giam_gia, trang_thai) " +
+                "VALUES(?, ?, ?, 0, 0, ?)";
+        try {
+            em.getTransaction().begin();
+
+            em.createNativeQuery(sql)
+                    .setParameter(1, hoaDon.getNhanVien().getMaNV())
+                    .setParameter(2, hoaDon.getKhachHang().getMaKH())
+                    .setParameter(3, hoaDon.getNgayLapHoaDon())
+                    .setParameter(4, hoaDon.isTrangThai())
+                    .executeUpdate();
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            return false;
+        }
+        return true;
+    }
+
+
+    public List<HoaDon> getDSHDLuuTam() {
+        String sql = "from HoaDon where trangThai = false and tongTien != 0";
+        return em.createQuery(sql, HoaDon.class).getResultList();
     }
 
     public boolean update(HoaDon hoaDon) {
@@ -85,29 +115,30 @@ public class HoaDon_DAO {
         return executeTransaction(() -> em.remove(hd));
     }
 
-    public ArrayList<HoaDon> getDSHDTheoNam(String nam) {
-        String sql = "Select * from HoaDon where YEAR(ngay_lap_hoa_don) = ?";
-        return (ArrayList<HoaDon>) em.createNativeQuery(sql, HoaDon.class).setParameter(1, nam).getResultList();
+    public List<HoaDon> getDSHDTheoNam(String nam) {
+        String sql = "from HoaDon where YEAR(ngayLapHoaDon) = :nam";
+        return em.createQuery(sql, HoaDon.class).setParameter("nam", nam).getResultList();
     }
 
-    public ArrayList<HoaDon> getDSHDTheoThang(int thang, int nam) {
-        String sql = "Select * from HoaDon where YEAR(ngay_lap_hoa_don) = ? and MONTH(ngay_lap_hoa_don) = ?";
-        return (ArrayList<HoaDon>) em.createNativeQuery(sql, HoaDon.class)
-                .setParameter(1, nam)
-                .setParameter(2, thang)
+    public List<HoaDon> getDSHDTheoThang(int thang, int nam) {
+        String sql = "from HoaDon where YEAR(ngayLapHoaDon) = :nam and MONTH(ngayLapHoaDon) = :thang";
+        return em.createQuery(sql, HoaDon.class)
+                .setParameter("nam", nam)
+                .setParameter("thang", thang)
                 .getResultList();
     }
 
-    public ArrayList<HoaDon> getDSHDTheoNgay(LocalDateTime ngayLap) {
-        String sql = "Select * from HoaDon where YEAR(ngay_lap_hoa_don) = ? and MONTH(ngay_lap_hoa_don) = ? and DAY(ngay_lap_hoa_don) = ?";
-        return (ArrayList<HoaDon>) em.createNativeQuery(sql, HoaDon.class)
-                .setParameter(1, ngayLap.getYear())
-                .setParameter(2, ngayLap.getMonthValue())
-                .setParameter(3, ngayLap.getDayOfMonth())
+    public List<HoaDon> getDSHDTheoNgay(LocalDate ngayLap) {
+        String sql = "from HoaDon where YEAR(ngayLapHoaDon) = :nam and MONTH(ngayLapHoaDon) = :thang and DAY(ngayLapHoaDon) = :ngay";
+        return em.createQuery(sql, HoaDon.class)
+                .setParameter("nam", ngayLap.getYear())
+                .setParameter("thang", ngayLap.getMonthValue())
+                .setParameter("ngay", ngayLap.getDayOfMonth())
                 .getResultList();
     }
 
     private boolean executeTransaction(Runnable action) {
+        EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
             action.run();

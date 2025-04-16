@@ -1,5 +1,3 @@
-package test_crud;
-
 import dao.NhanVien_DAO;
 import dao.TaiKhoan_DAO;
 import entity.NhanVien;
@@ -12,8 +10,8 @@ import java.time.LocalDate;
 public class Test_NhanVien {
     public static void main(String[] args) {
         EntityManager em = Persistence.createEntityManagerFactory("HHKT Station").createEntityManager();
-        NhanVien_DAO nhanVien_dao = new NhanVien_DAO(em);
-        TaiKhoan_DAO taiKhoan_dao = new TaiKhoan_DAO(em);
+        NhanVien_DAO nhanVien_dao = new NhanVien_DAO();
+        TaiKhoan_DAO taiKhoan_dao = new TaiKhoan_DAO();
         NhanVien nv;
         TaiKhoan tk;
 

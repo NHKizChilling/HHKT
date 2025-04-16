@@ -3,41 +3,35 @@ package dao;
 import entity.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import util.JPAUtil;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Ve_DAO {
     private final EntityManager em;
-    private final EntityTransaction transaction;
 
-    public Ve_DAO(EntityManager em) {
-        this.em = em;
-        this.transaction = em.getTransaction();
+    public Ve_DAO() {
+        this.em = JPAUtil.getEntityManager();
     }
 
-    public ArrayList<Ve> getAllVe() {
-        String sql = "Select * from Ve";
-        return (ArrayList<Ve>) em.createNativeQuery(sql, Ve.class).getResultList();
+    public List<Ve> getAllVe() {
+
+        return em.createQuery("from Ve", Ve.class).getResultList();
     }
 
     public Ve getVeTheoID(String maVe) {
-        String sql = "Select * from Ve where ma_ve = ?";
-        return (Ve) em.createNativeQuery(sql, Ve.class).setParameter(1, maVe).getSingleResult();
+        String sql = "from Ve where maVe = :maVe";
+        return em.createQuery(sql, Ve.class).setParameter("maVe", maVe).getSingleResult();
     }
 
-    public Ve getLaiVe(Ve ve) {
-        String sql = "Select TOP 1 * from Ve where tinh_trang_ve = 'DaBan' ORDER BY ma_ve DESC";   // Lấy vé cuối cùng đã bán
-        return (Ve) em.createNativeQuery(sql, Ve.class).getSingleResult();
+    public Ve getLaiVe() {
+        // Lấy vé cuối cùng đã bán
+        String sql = "from Ve where tinhTrangVe = 'DaBan' ORDER BY maVe DESC LIMIT 1";
+        return em.createQuery(sql, Ve.class).getSingleResult();
     }
 
     public boolean create(Ve ve) {
-        try {
-            em.persist(ve);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        return executeTransaction(() -> em.persist(ve));
     }
 
     public boolean update(Ve ve) {
@@ -52,17 +46,18 @@ public class Ve_DAO {
         });
     }
 
-    public ArrayList<Ve> getDSVeTheoMaKH(String maKH) {
-        String sql = "Select * from Ve where ma_kh = ?";
-        return (ArrayList<Ve>) em.createNativeQuery(sql, Ve.class).setParameter(1, maKH).getResultList();
+    public List<Ve> getDSVeTheoMaKH(String maKH) {
+        String sql = "from Ve where khachHang.maKH = :makh";
+        return em.createQuery(sql, Ve.class).setParameter("makh", maKH).getResultList();
     }
 
-    public ArrayList<Ve> getVeTheoTinhTrang(String tinhTrangVe) {
-        String sql = "Select * from Ve where tinh_trang_ve = ?";
-        return (ArrayList<Ve>) em.createNativeQuery(sql, Ve.class).setParameter(1, tinhTrangVe).getResultList();
+    public List<Ve> getVeTheoTinhTrang(String tinhTrangVe) {
+        String sql = "from Ve where tinhTrangVe = :tinhTrangVe";
+        return em.createQuery(sql, Ve.class).setParameter("tinhTrangVe", tinhTrangVe).getResultList();
     }
 
     private boolean executeTransaction(Runnable action) {
+        EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
             action.run();

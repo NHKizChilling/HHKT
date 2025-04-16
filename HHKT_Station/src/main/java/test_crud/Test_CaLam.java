@@ -1,19 +1,14 @@
-package test_crud;
-
 import dao.CaLamViec_DAO;
 import dao.NhanVien_DAO;
 import entity.CaLamViec;
 import entity.NhanVien;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.Persistence;
 
 import java.time.LocalDateTime;
 
 public class Test_CaLam {
     public static void main(String[] args) {
-        EntityManager em = Persistence.createEntityManagerFactory("HHKT Station").createEntityManager();
-        CaLamViec_DAO caLamViec_dao = new CaLamViec_DAO(em);
-        NhanVien_DAO nhanVien_dao = new NhanVien_DAO(em);
+        CaLamViec_DAO caLamViec_dao = new CaLamViec_DAO();
+        NhanVien_DAO nhanVien_dao = new NhanVien_DAO();
 
         NhanVien nv = nhanVien_dao.getNhanVien("21814");
 

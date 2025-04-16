@@ -3,21 +3,20 @@ package dao;
 import entity.LoaiTau;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import util.JPAUtil;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class LoaiTau_DAO {
     private final EntityManager em;
-    private final EntityTransaction transaction;
 
-    public LoaiTau_DAO(EntityManager em) {
-        this.em = em;
-        this.transaction = em.getTransaction();
+    public LoaiTau_DAO() {
+        this.em = JPAUtil.getEntityManager();
     }
 
-    public ArrayList<LoaiTau> getAllLoaiTau() {
-        String sql = "Select * from LoaiTau";
-        return (ArrayList<LoaiTau>) em.createNativeQuery(sql, LoaiTau.class).getResultList();
+    public List<LoaiTau> getAllLoaiTau() {
+
+        return em.createQuery("from LoaiTau", LoaiTau.class).getResultList();
     }
 
     public boolean create(LoaiTau loaiTau) {
@@ -36,11 +35,12 @@ public class LoaiTau_DAO {
     }
 
     public LoaiTau getLoaiTauTheoMa(String maLoaiTau) {
-        String sql = "Select * from LoaiTau where ma_loai_tau = ?";
-        return (LoaiTau) em.createNativeQuery(sql, LoaiTau.class).setParameter(1, maLoaiTau).getSingleResult();
+        String sql = "from LoaiTau where maLoaiTau = :maLoaiTau";
+        return em.createQuery(sql, LoaiTau.class).setParameter("maLoaiTau", maLoaiTau).getSingleResult();
     }
 
     private boolean executeTransaction(Runnable action) {
+        EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
             action.run();

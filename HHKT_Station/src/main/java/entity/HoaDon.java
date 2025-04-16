@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class HoaDon {
+public class HoaDon implements Serializable {
     @Id
     @ColumnDefault("[dbo].[auto_idhd]()")
     @Column(name = "ma_hd", nullable = false, columnDefinition = "char(14)")

@@ -1,5 +1,3 @@
-package test_crud;
-
 import dao.KhachHang_DAO;
 import entity.KhachHang;
 import jakarta.persistence.EntityManager;
@@ -8,11 +6,11 @@ import jakarta.persistence.Persistence;
 public class Test_KhachHang {
     public static void main(String[] args) {
         EntityManager em = Persistence.createEntityManagerFactory("HHKT Station").createEntityManager();
-        KhachHang_DAO khachHang_dao = new KhachHang_DAO(em);
+        KhachHang_DAO khachHang_dao = new KhachHang_DAO();
 
         try{
             KhachHang kh = new KhachHang("Nguyen Van A", "12345678912", "0223456789", "nguyenvana@gmail.com");
-            khachHang_dao.creat(kh);
+            khachHang_dao.create(kh);
 
             System.out.println("Khách hàng vừa thêm: " + khachHang_dao.getAllKhachHang().getLast().getMaKH() + " - " + khachHang_dao.getAllKhachHang().getLast().getTenKH()
                     + " - " + khachHang_dao.getAllKhachHang().getLast().getSdt() + " - " + khachHang_dao.getAllKhachHang().getLast().getEmail());

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Setter
@@ -16,7 +17,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class LoaiTau {
+public class LoaiTau implements Serializable {
     @Id
     @Column(name = "ma_loai_tau", nullable = false, length = 5)
     private String maLoaiTau;

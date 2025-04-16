@@ -1,35 +1,32 @@
 package dao;
 
-import entity.ChuyenTau;
-import entity.LoaiToa;
 import entity.Toa;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import util.JPAUtil;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Toa_DAO {
     private final EntityManager em;
-    private final EntityTransaction transaction;
 
-    public Toa_DAO(EntityManager em) {
-        this.em = em;
-        this.transaction = em.getTransaction();
+    public Toa_DAO() {
+        this.em = JPAUtil.getEntityManager();
     }
 
-    public ArrayList<Toa> getAllToa() {
-        String sql = "Select * from Toa";
-        return (ArrayList<Toa>) em.createNativeQuery(sql, Toa.class).getResultList();
+    public List<Toa> getAllToa() {
+
+        return em.createQuery("from Toa", Toa.class).getResultList();
     }
 
-    public ArrayList<Toa> getAllToaTheoChuyenTau(String soHieuTau) {
-        String sql = "Select * from Toa where so_hieu_tau = ? order by stt_toa";
-        return (ArrayList<Toa>) em.createNativeQuery(sql, Toa.class).setParameter(1, soHieuTau).getResultList();
+    public List<Toa> getAllToaTheoChuyenTau(String soHieuTau) {
+        String sql = "from Toa where soHieuTau.id = :soHieuTau order by sttToa";
+        return em.createQuery(sql, Toa.class).setParameter("soHieuTau", soHieuTau).getResultList();
     }
 
     public Toa getToaTheoID(String maToa) {
-        String sql = "Select * from Toa where ma_toa = ?";
-        return (Toa) em.createNativeQuery(sql, Toa.class).setParameter(1, maToa).getSingleResult();
+        String sql = "from Toa where maToa = :maToa";
+        return em.createQuery(sql, Toa.class).setParameter("maToa", maToa).getSingleResult();
     }
 
     public boolean create(Toa toa) {
@@ -48,14 +45,15 @@ public class Toa_DAO {
     }
 
     private boolean executeTransaction(Runnable action) {
+        EntityTransaction tx = em.getTransaction();
         try {
-            transaction.begin();
+            tx.begin();
             action.run();
-            transaction.commit();
+            tx.commit();
             return true;
         } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
+            if (tx.isActive()) {
+                tx.rollback();
             }
             e.printStackTrace();
             return false;

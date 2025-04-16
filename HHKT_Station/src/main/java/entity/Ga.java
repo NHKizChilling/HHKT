@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
@@ -17,7 +18,7 @@ import java.util.Objects;
 @Table(name = "Ga", uniqueConstraints = {
         @UniqueConstraint(name = "UQ_ten_ga", columnNames = {"ten_ga"})
 })
-public class Ga {
+public class Ga implements Serializable {
     @Id
     @Column(name = "ma_ga", nullable = false, length = 10)
     private String maGa;

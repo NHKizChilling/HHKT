@@ -3,26 +3,27 @@ package dao;
 import entity.ChuyenTau;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import util.JPAUtil;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ChuyenTau_DAO {
     private final EntityManager em;
-    private final EntityTransaction transaction;
 
-    public ChuyenTau_DAO(EntityManager em) {
-        this.em = em;
-        this.transaction = em.getTransaction();
+    public ChuyenTau_DAO() {
+        this.em = JPAUtil.getEntityManager();
     }
 
-    public ArrayList<ChuyenTau> getAll() {
-        String sql = "Select * from ChuyenTau";
-        return (ArrayList<ChuyenTau>) em.createNativeQuery(sql, ChuyenTau.class).getResultList();
+    public List<ChuyenTau> getAll() {
+
+        return em.createQuery("from ChuyenTau", ChuyenTau.class).getResultList();
     }
 
     public ChuyenTau getChuyenTauTheoID(String soHieuTau) {
-        String sql = "Select * from ChuyenTau where so_hieu_tau = ?";
-        return (ChuyenTau) em.createNativeQuery(sql, ChuyenTau.class).setParameter(1, soHieuTau).getSingleResult();
+        String sql = "from ChuyenTau where soHieuTau = :soHieuTau";
+        return em.createQuery(sql, ChuyenTau.class)
+                .setParameter("soHieuTau", soHieuTau)
+                .getSingleResult();
     }
 
 
@@ -36,6 +37,7 @@ public class ChuyenTau_DAO {
     }
 
     private boolean executeTransaction(Runnable action) {
+        EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
             action.run();

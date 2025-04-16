@@ -1,5 +1,3 @@
-package test_crud;
-
 import dao.*;
 import entity.*;
 import jakarta.persistence.EntityManager;
@@ -8,18 +6,17 @@ import jakarta.persistence.Persistence;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Test_HoaDon {
     public static void main(String[] args) {
         EntityManager em = Persistence.createEntityManagerFactory("HHKT Station").createEntityManager();
-        Ve_DAO ve_dao = new Ve_DAO(em);
-        HoaDon_DAO hoaDon_dao = new HoaDon_DAO(em);
-        CT_HoaDon_DAO ct_hoaDon_dao = new CT_HoaDon_DAO(em);
-        CT_LichTrinh_DAO ct_lichTrinh_dao = new CT_LichTrinh_DAO(em);
-        LoaiVe_DAO loaiVe_dao = new LoaiVe_DAO(em);
-        KhuyenMai_DAO khuyenMai_dao = new KhuyenMai_DAO(em);
+        Ve_DAO ve_dao = new Ve_DAO();
+        HoaDon_DAO hoaDon_dao = new HoaDon_DAO();
+        CT_HoaDon_DAO ct_hoaDon_dao = new CT_HoaDon_DAO();
+        CT_LichTrinh_DAO ct_lichTrinh_dao = new CT_LichTrinh_DAO();
+        LoaiVe_DAO loaiVe_dao = new LoaiVe_DAO();
+        KhuyenMai_DAO khuyenMai_dao = new KhuyenMai_DAO();
         try {
             //create
             KhuyenMai khuyenMai = new KhuyenMai("KM250116SV", "Giảm 10% cho sinh viên", LocalDate.now(), LocalDate.now().plusDays(7), 0.1F, true);

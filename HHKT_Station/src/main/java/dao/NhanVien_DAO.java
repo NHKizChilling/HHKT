@@ -3,23 +3,20 @@ package dao;
 import entity.NhanVien;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
+import util.JPAUtil;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.List;
 
 public class NhanVien_DAO {
     private final EntityManager em;
-    private final EntityTransaction transaction;
 
-    public NhanVien_DAO(EntityManager em) {
-        this.em = em;
-        this.transaction = em.getTransaction();
+    public NhanVien_DAO() {
+        this.em = JPAUtil.getEntityManager();
     }
 
-    public ArrayList<NhanVien> getAll() {
-        String sql = "Select * from NhanVien";
-        return (ArrayList<NhanVien>) em.createNativeQuery(sql, NhanVien.class).getResultList();
+    public List<NhanVien> getAll() {
+
+        return em.createQuery("from NhanVien", NhanVien.class).getResultList();
     }
 
     public boolean create(NhanVien nv) {
@@ -38,14 +35,14 @@ public class NhanVien_DAO {
         });
     }
 
-    public ArrayList<NhanVien> getDSQuanLy() {
-        String sql = "Select * from NhanVien where chuc_vu = 'Quản lý'";
-        return (ArrayList<NhanVien>) em.createNativeQuery(sql, NhanVien.class).getResultList();
+    public List<NhanVien> getDSQuanLy() {
+        String sql = "from NhanVien where chucVu = 'Quản lý'";
+        return em.createQuery(sql, NhanVien.class).getResultList();
     }
 
-    public ArrayList<NhanVien> getDSNhanVien() {
-        String sql = "Select * from NhanVien where chuc_vu = 'Nhân viên'";
-        return (ArrayList<NhanVien>) em.createNativeQuery(sql, NhanVien.class).getResultList();
+    public List<NhanVien> getDSNhanVien() {
+        String sql = "from NhanVien where chucVu = 'Nhân viên'";
+        return em.createQuery(sql, NhanVien.class).getResultList();
     }
 
     public boolean updateInfo(NhanVien nv) {
@@ -57,6 +54,7 @@ public class NhanVien_DAO {
     }
 
     private boolean executeTransaction(Runnable action) {
+        EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
             action.run();
@@ -72,12 +70,16 @@ public class NhanVien_DAO {
     }
 
     public NhanVien getNhanVienTheoTen(String tenNV) {
-        String sql = "Select * from NhanVien where ten_nv = ?";
-        return (NhanVien) em.createNativeQuery(sql, NhanVien.class).setParameter(1, tenNV).getSingleResult();
+        String sql = "from NhanVien where tenNV = :ten";
+        return em.createQuery(sql, NhanVien.class)
+                .setParameter("ten", tenNV)
+                .getSingleResult();
     }
 
     public NhanVien getNhanVienTheoSDT(String sdt) {
-        String sql = "Select * from NhanVien where sdt = ?";
-        return (NhanVien) em.createNativeQuery(sql, NhanVien.class).setParameter(1, sdt).getSingleResult();
+        String sql = "from NhanVien where sdt = :sdt";
+        return em.createQuery(sql, NhanVien.class)
+                .setParameter("sdt", sdt)
+                .getSingleResult();
     }
 }

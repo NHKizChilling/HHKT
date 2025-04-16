@@ -3,21 +3,20 @@ package dao;
 import entity.LoaiToa;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import util.JPAUtil;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class LoaiToa_DAO {
     private final EntityManager em;
-    private final EntityTransaction transaction;
 
-    public LoaiToa_DAO(EntityManager em) {
-        this.em = em;
-        this.transaction = em.getTransaction();
+    public LoaiToa_DAO() {
+        this.em = JPAUtil.getEntityManager();
     }
 
-    public ArrayList<LoaiToa> getAllLoaiToa() {
-        String sql = "Select * from LoaiToa";
-        return (ArrayList<LoaiToa>) em.createNativeQuery(sql, LoaiToa.class).getResultList();
+    public List<LoaiToa> getAllLoaiToa() {
+
+        return em.createQuery("from LoaiToa ", LoaiToa.class).getResultList();
     }
 
     public boolean create(LoaiToa loaiToa) {
@@ -36,8 +35,8 @@ public class LoaiToa_DAO {
     }
 
     public LoaiToa getLoaiToaTheoMa(String maLoaiToa) {
-        String sql = "Select * from LoaiToa where ma_loai_toa = ?";
-        return (LoaiToa) em.createNativeQuery(sql, LoaiToa.class).setParameter(1, maLoaiToa).getSingleResult();
+        String sql = "from LoaiToa where maLoaiToa = :maLoaiToa";
+        return em.createQuery(sql, LoaiToa.class).setParameter("maLoaiToa", maLoaiToa).getSingleResult();
     }
 
     public boolean xoaLoaiToaTheoMa(String maLoaiToa) {
@@ -48,6 +47,7 @@ public class LoaiToa_DAO {
     }
 
     private boolean executeTransaction(Runnable action) {
+        EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
             action.run();

@@ -1,44 +1,52 @@
 package dao;
 
-import entity.ChiTietLichTrinh;
 import entity.ChoNgoi;
+import entity.LichTrinh;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import util.JPAUtil;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ChoNgoi_DAO {
     private final EntityManager em;
-    private final EntityTransaction transaction;
 
-    public ChoNgoi_DAO(EntityManager em) {
-        this.em = em;
-        this.transaction = em.getTransaction();
+    public ChoNgoi_DAO() {
+        this.em = JPAUtil.getEntityManager();
     }
 
-    public ArrayList<ChoNgoi> getAllChoNgoi() {
-        String sql = "Select * from ChoNgoi";
-        return (ArrayList<ChoNgoi>) em.createNativeQuery(sql, ChoNgoi.class).getResultList();
+    public List<ChoNgoi> getAllChoNgoi() {
+
+        return em.createQuery("from ChoNgoi ", ChoNgoi.class).getResultList();
     }
 
     public ChoNgoi getChoNgoiTheoToa(String maToa, int sttCho) {
-        String sql = "Select * from ChoNgoi where ma_toa = ? and stt_cho = ?";
-        return (ChoNgoi) em.createNativeQuery(sql, ChoNgoi.class).setParameter(1, maToa).setParameter(2, sttCho).getSingleResult();
+        String sql = "from ChoNgoi where toa.maToa = :maToa and sttCho = :stt";
+        return em.createQuery(sql, ChoNgoi.class)
+                .setParameter("maToa", maToa)
+                .setParameter("stt", sttCho)
+                .getSingleResult();
     }
 
     public ChoNgoi getChoNgoiTheoMa(String maCho) {
-        String sql = "Select * from ChoNgoi where ma_cho = ?";
-        return (ChoNgoi) em.createNativeQuery(sql, ChoNgoi.class).setParameter(1, maCho).getSingleResult();
+        String sql = "from ChoNgoi where maCho = :maCho";
+        return em.createQuery(sql, ChoNgoi.class)
+                .setParameter("maCho", maCho)
+                .getSingleResult();
     }
 
-    public ArrayList<ChoNgoi> getDSChoNgoiTheoToa(String maToa) {
-        String sql = "Select * from ChoNgoi where ma_toa = ?";
-        return (ArrayList<ChoNgoi>) em.createNativeQuery(sql, ChoNgoi.class).setParameter(1, maToa).getResultList();
+    public List<ChoNgoi> getDSChoNgoiTheoToa(String maToa) {
+        String sql = "from ChoNgoi where toa.maToa = :maToa";
+        return em.createQuery(sql, ChoNgoi.class)
+                .setParameter("maToa", maToa)
+                .getResultList();
     }
 
-    public ArrayList<ChoNgoi> getChoNgoiDaDat(ChiTietLichTrinh chiTietLichTrinh) {
-        String sql = "Select * from ChoNgoi a join ChiTietLichTrinh b on a.ma_cho = b.ma_cho where trang_thai = 0";
-        return (ArrayList<ChoNgoi>) em.createNativeQuery(sql, ChoNgoi.class).getResultList();
+    public List<ChoNgoi> getChoNgoiDaDat(LichTrinh lichTrinh) {
+        String sql = "Select ctlt.choNgoi from ChiTietLichTrinh ctlt where ctlt.lichTrinh = :lichTrinh and trangThai = false";
+        return em.createQuery(sql, ChoNgoi.class)
+                .setParameter("lichTrinh", lichTrinh)
+                .getResultList();
     }
 
     public boolean create(ChoNgoi choNgoi) {
@@ -57,6 +65,7 @@ public class ChoNgoi_DAO {
     }
 
     private boolean executeTransaction(Runnable action) {
+        EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
             action.run();
@@ -69,10 +78,5 @@ public class ChoNgoi_DAO {
             e.printStackTrace();
             return false;
         }
-    }
-
-    public ArrayList<ChoNgoi> getDsChoNgoiTheoToa(String maToa) {
-        String sql = "Select * from ChoNgoi where ma_toa = ?";
-        return (ArrayList<ChoNgoi>) em.createNativeQuery(sql, ChoNgoi.class).setParameter(1, maToa).getResultList();
     }
 }

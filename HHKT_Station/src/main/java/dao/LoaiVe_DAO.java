@@ -3,21 +3,20 @@ package dao;
 import entity.LoaiVe;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import util.JPAUtil;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class LoaiVe_DAO {
     private final EntityManager em;
-    private final EntityTransaction transaction;
 
-    public LoaiVe_DAO(EntityManager em) {
-        this.em = em;
-        this.transaction = em.getTransaction();
+    public LoaiVe_DAO() {
+        this.em = JPAUtil.getEntityManager();
     }
 
-    public ArrayList<LoaiVe> getAllLoaiVe() {
-        String sql = "Select * from LoaiVe";
-        return (ArrayList<LoaiVe>) em.createNativeQuery(sql, LoaiVe.class).getResultList();
+    public List<LoaiVe> getAllLoaiVe() {
+
+        return em.createQuery("from LoaiVe", LoaiVe.class).getResultList();
     }
 
     public boolean create(LoaiVe loaiVe) {
@@ -38,16 +37,17 @@ public class LoaiVe_DAO {
     }
 
     public LoaiVe getLoaiVeTheoTen(String tenLoai) {
-        String sql = "Select * from LoaiVe where ten_loai_ve = ?";
-        return (LoaiVe) em.createNativeQuery(sql, LoaiVe.class).setParameter(1, tenLoai).getSingleResult();
+        String sql = "from LoaiVe where tenLoaiVe = :tenLoaiVe";
+        return em.createQuery(sql, LoaiVe.class).setParameter("tenLoaiVe", tenLoai).getSingleResult();
     }
 
     public LoaiVe getLoaiVeTheoMa(String maLoaiVe) {
-        String sql = "Select * from LoaiVe where ma_loai_ve = ?";
-        return (LoaiVe) em.createNativeQuery(sql, LoaiVe.class).setParameter(1, maLoaiVe).getSingleResult();
+        String sql = "from LoaiVe where maLoaiVe = :maLoaiVe";
+        return em.createQuery(sql, LoaiVe.class).setParameter("maLoaiVe", maLoaiVe).getSingleResult();
     }
 
     private boolean executeTransaction(Runnable action) {
+        EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
             action.run();

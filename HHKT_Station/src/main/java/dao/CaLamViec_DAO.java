@@ -3,27 +3,29 @@ package dao;
 import entity.CaLamViec;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import util.JPAUtil;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.List;
 
 public class CaLamViec_DAO {
     private final EntityManager em;
-    private final EntityTransaction transaction;
 
-    public CaLamViec_DAO(EntityManager em) {
-        this.em = em;
-        this.transaction = em.getTransaction();
+    public CaLamViec_DAO() {
+        this.em = JPAUtil.getEntityManager();
     }
 
-    public ArrayList<CaLamViec> getAllCaLamViec() {
-        String sql = "Select * from CaLamViec";
-        return (ArrayList<CaLamViec>) em.createNativeQuery(sql, CaLamViec.class).getResultList();
+    public List<CaLamViec> getAllCaLamViec() {
+
+        return em.createQuery("from CaLamViec ", CaLamViec.class).getResultList();
     }
 
     public CaLamViec getCaLamViec(String maNV, LocalDateTime gioMoCa) {
-        String sql = "Select * from CaLamViec where ma_nv = ? and gio_mo_ca = ?";
-        return (CaLamViec) em.createNativeQuery(sql, CaLamViec.class).setParameter(1, maNV).setParameter(2, gioMoCa).getSingleResult();
+        String sql = "from CaLamViec where nhanVien.maNV = :manv and gioMoCa = :giomoca";
+        return em.createQuery(sql, CaLamViec.class)
+                .setParameter("manv", maNV)
+                .setParameter("giomoca", gioMoCa)
+                .getSingleResult();
     }
 
     public boolean create(CaLamViec caLamViec) {
@@ -42,6 +44,7 @@ public class CaLamViec_DAO {
     }
 
     private boolean executeTransaction(Runnable action) {
+        EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
             action.run();

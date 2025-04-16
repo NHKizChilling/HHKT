@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -15,7 +16,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class LichTrinh {
+public class LichTrinh implements Serializable {
     @Id
     @Column(name = "ma_lich_trinh", nullable = false, length = 20)
     private String maLichTrinh;

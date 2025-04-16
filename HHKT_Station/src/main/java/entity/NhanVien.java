@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -20,7 +21,7 @@ import java.util.Objects;
         @UniqueConstraint(name = "UQ__socccd__nv", columnNames = {"socccd"}),
         @UniqueConstraint(name = "UQ__sdt__nv", columnNames = {"sdt"})
 })
-public class NhanVien {
+public class NhanVien implements Serializable {
     @Id
     @Column(name = "ma_nv", nullable = false, columnDefinition = "char(11)")
     private String maNV;

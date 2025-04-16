@@ -3,21 +3,20 @@ package dao;
 import entity.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import util.JPAUtil;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class CT_LichTrinh_DAO {
     private final EntityManager em;
-    private final EntityTransaction transaction;
 
-    public CT_LichTrinh_DAO(EntityManager em) {
-        this.em = em;
-        this.transaction = em.getTransaction();
+    public CT_LichTrinh_DAO() {
+        this.em = JPAUtil.getEntityManager();
     }
 
-    public ArrayList<ChiTietLichTrinh> getAllChiTietLichTrinh() {
-        String sql = "Select * from ChiTietLichTrinh";
-        return (ArrayList<ChiTietLichTrinh>) em.createNativeQuery(sql, ChiTietLichTrinh.class).getResultList();
+    public List<ChiTietLichTrinh> getAllChiTietLichTrinh() {
+
+        return em.createQuery("from ChiTietLichTrinh", ChiTietLichTrinh.class).getResultList();
     }
 
     public boolean create(ChiTietLichTrinh ctlt) {
@@ -29,6 +28,7 @@ public class CT_LichTrinh_DAO {
     }
 
     private boolean executeTransaction(Runnable action) {
+        EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
             action.run();
@@ -45,10 +45,12 @@ public class CT_LichTrinh_DAO {
 
     public boolean updateCTLT(ChiTietLichTrinh ctlt, boolean trangThai) {
         return executeTransaction(() -> {
-            String sql = "Update ChiTietLichTrinh set trang_thai = ? where ma_cho = ? and ma_lich_trinh = ?";
-            em.createNativeQuery(sql, ChiTietLichTrinh.class)
-                    .setParameter(1, trangThai).setParameter(2, ctlt.getChoNgoi().getMaCho())
-                    .setParameter(3, ctlt.getLichTrinh().getMaLichTrinh()).executeUpdate();
+            String sql = "Update ChiTietLichTrinh set trangThai = :trangThai where choNgoi.maCho = :maCho and lichTrinh.maLichTrinh = :malt";
+            em.createQuery(sql, ChiTietLichTrinh.class)
+                    .setParameter("trangThai", trangThai)
+                    .setParameter("maCho", ctlt.getChoNgoi().getMaCho())
+                    .setParameter("malt", ctlt.getLichTrinh().getMaLichTrinh())
+                    .executeUpdate();
         });
     }
 
@@ -59,21 +61,29 @@ public class CT_LichTrinh_DAO {
         });
     }
 
-    public ArrayList<ChiTietLichTrinh> getCtltTheoTrangThai(boolean trangThai) {
-        String sql = "Select * from ChiTietLichTrinh where trang_thai = ?";
-        return (ArrayList<ChiTietLichTrinh>) em.createNativeQuery(sql, ChiTietLichTrinh.class).setParameter(1, trangThai).getResultList();
+    public List<ChiTietLichTrinh> getCtltTheoTrangThai(boolean trangThai) {
+        String sql = "from ChiTietLichTrinh where trangThai = :trangThai";
+        return em.createQuery(sql, ChiTietLichTrinh.class)
+                .setParameter("trangThai", trangThai)
+                .getResultList();
     }
 
     public ChiTietLichTrinh getCTLTTheoCN(String maLichTrinh, String maChoNgoi) {
-        String sql = "Select * from ChiTietLichTrinh where ma_lich_trinh = ? and ma_cho = ?";
-        return (ChiTietLichTrinh) em.createNativeQuery(sql, ChiTietLichTrinh.class).setParameter(1, maLichTrinh).setParameter(2, maChoNgoi).getSingleResult();
+        String sql = "from ChiTietLichTrinh where lichTrinh.maLichTrinh = :malt and choNgoi.maCho = :maCho";
+        return em.createQuery(sql, ChiTietLichTrinh.class)
+                .setParameter("malt", maLichTrinh)
+                .setParameter("maCho", maChoNgoi)
+                .getSingleResult();
     }
 
     public boolean getTrangThaiCN(String maLichTrinh, String maCho) {
-        String sql = "Select trang_thai from ChiTietLichTrinh where ma_lich_trinh = ? and ma_cho = ?";
+        String sql = "Select trangThai from ChiTietLichTrinh where lichTrinh.maLichTrinh = :malt and choNgoi.maCho = :maCho";
         boolean trangThai = false;
         try {
-            trangThai = (boolean) em.createNativeQuery(sql, ChiTietLichTrinh.class).setParameter(1, maLichTrinh).setParameter(2, maCho).getSingleResult();
+            trangThai = em.createQuery(sql, boolean.class)
+                    .setParameter("malt", maLichTrinh)
+                    .setParameter("maCho", maCho)
+                    .getSingleResult();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -81,6 +91,7 @@ public class CT_LichTrinh_DAO {
     }
 
     public void addChiTietLichTrinh(String maLichTrinh) {
+        EntityTransaction transaction = em.getTransaction();
         String sql = """
                 INSERT INTO ChiTietLichTrinh (ma_cho, ma_lich_trinh, trang_thai, gia_cho)
                 SELECT\s
@@ -175,8 +186,10 @@ public class CT_LichTrinh_DAO {
         }
     }
 
-    public ArrayList<ChiTietLichTrinh> getCtltTheoMaLichTrinh(String maLichTrinh) {
-        String sql = "Select * from ChiTietLichTrinh where ma_lich_trinh = ?";
-        return (ArrayList<ChiTietLichTrinh>) em.createNativeQuery(sql, ChiTietLichTrinh.class).setParameter(1, maLichTrinh).getResultList();
+    public List<ChiTietLichTrinh> getCtltTheoMaLichTrinh(String maLichTrinh) {
+        String sql = "from ChiTietLichTrinh where lichTrinh.maLichTrinh = :malt";
+        return em.createQuery(sql, ChiTietLichTrinh.class)
+                .setParameter("malt", maLichTrinh)
+                .getResultList();
     }
 }

@@ -3,34 +3,24 @@ package dao;
 import entity.ChiTietHoaDon;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import util.JPAUtil;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class CT_HoaDon_DAO {
     private final EntityManager em;
-    private final EntityTransaction transaction;
 
-    public CT_HoaDon_DAO(EntityManager em) {
-        this.em = em;
-        this.transaction = em.getTransaction();
+    public CT_HoaDon_DAO() {
+        this.em = JPAUtil.getEntityManager();
     }
 
-    public ArrayList<ChiTietHoaDon> getAllCT_HoaDon() {
-        String sql = "Select * from ChiTietHoaDon";
-        return (ArrayList<ChiTietHoaDon>) em.createNativeQuery(sql, ChiTietHoaDon.class).getResultList();
+    public List<ChiTietHoaDon> getAllCT_HoaDon() {
+
+        return em.createQuery("from ChiTietHoaDon", ChiTietHoaDon.class).getResultList();
     }
 
     public boolean create(ChiTietHoaDon cthd) {
-        transaction.begin();
-        try {
-            em.persist(cthd);
-            transaction.commit();
-        } catch (Exception e) {
-            transaction.rollback();
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        return executeTransaction(() -> em.persist(cthd));
     }
 
     public boolean update(ChiTietHoaDon cthd) {
@@ -42,21 +32,29 @@ public class CT_HoaDon_DAO {
     }
 
     public ChiTietHoaDon getCT_HoaDon(String maHD, String maVe) {
-        String sql = "Select * from ChiTietHoaDon where ma_hd = ? and ma_ve = ?";
-        return (ChiTietHoaDon) em.createNativeQuery(sql, ChiTietHoaDon.class).setParameter(1, maHD).setParameter(2, maVe).getSingleResult();
+        String sql = "from ChiTietHoaDon where hoaDon.maHD = :mahd and ve.maVe = :mave";
+        return em.createQuery(sql, ChiTietHoaDon.class)
+                .setParameter("mahd", maHD)
+                .setParameter("mave", maVe)
+                .getSingleResult();
     }
 
     public ChiTietHoaDon getCT_HoaDonTheoMaVe(String maVe) {
-        String sql = "Select * from ChiTietHoaDon where ma_ve = ?";
-        return (ChiTietHoaDon) em.createNativeQuery(sql, ChiTietHoaDon.class).setParameter(1, maVe).getSingleResult();
+        String sql = "from ChiTietHoaDon where ve.maVe = :mave";
+        return em.createQuery(sql, ChiTietHoaDon.class)
+                .setParameter("mave", maVe)
+                .getSingleResult();
     }
 
-    public ArrayList<ChiTietHoaDon> getCT_HoaDon(String maHD) {
-        String sql = "Select * from ChiTietHoaDon where ma_hd = ?";
-        return (ArrayList<ChiTietHoaDon>) em.createNativeQuery(sql, ChiTietHoaDon.class).setParameter(1, maHD).getResultList();
+    public List<ChiTietHoaDon> getCT_HoaDon(String maHD) {
+        String sql = "from ChiTietHoaDon where hoaDon.maHD = :mahd";
+        return em.createQuery(sql, ChiTietHoaDon.class)
+                .setParameter("mahd", maHD)
+                .getResultList();
     }
 
     private boolean executeTransaction(Runnable action) {
+        EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
             action.run();

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Setter
@@ -13,7 +14,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Toa {
+public class Toa implements Serializable {
     @Id
     @Column(name = "ma_toa", nullable = false, length = 10)
     private String maToa;

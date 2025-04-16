@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Setter
@@ -14,7 +15,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class ChoNgoi {
+public class ChoNgoi implements Serializable {
     @Id
     @Column(name = "ma_cho", nullable = false, length = 15)
     private String maCho;

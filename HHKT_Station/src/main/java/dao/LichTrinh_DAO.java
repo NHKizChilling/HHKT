@@ -3,78 +3,75 @@ package dao;
 import entity.LichTrinh;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import util.JPAUtil;
 
-import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.List;
 
 public class LichTrinh_DAO {
     private final EntityManager em;
-    private final EntityTransaction transaction;
 
-    public LichTrinh_DAO(EntityManager em) {
-        this.em = em;
-        this.transaction = em.getTransaction();
+    public LichTrinh_DAO() {
+        this.em = JPAUtil.getEntityManager();
     }
 
-    public ArrayList<LichTrinh> getAll() {
-        String sql = "Select * from LichTrinh";
-        return (ArrayList<LichTrinh>) em.createNativeQuery(sql, LichTrinh.class).getResultList();
+    public List<LichTrinh> getAll() {
+
+        return em.createQuery("from LichTrinh", LichTrinh.class).getResultList();
     }
 
     public LichTrinh getLichTrinhTheoID(String maLichTrinh) {
-        String sql = "Select * from LichTrinh where ma_lich_trinh = ?";
-        return (LichTrinh) em.createNativeQuery(sql, LichTrinh.class).setParameter(1, maLichTrinh).getSingleResult();
+        String sql = " from LichTrinh where maLichTrinh = :maLichTrinh";
+        return em.createQuery(sql, LichTrinh.class).setParameter("maLichTrinh", maLichTrinh).getSingleResult();
     }
 
-    public ArrayList<LichTrinh> getDSLichTrinhTheoTrangThai(boolean trangThai) {
-        String sql = "Select * from LichTrinh where trang_thai = ?";
-        return (ArrayList<LichTrinh>) em.createNativeQuery(sql, LichTrinh.class).setParameter(1, trangThai).getResultList();
+    public List<LichTrinh> getDSLichTrinhTheoTrangThai(boolean trangThai) {
+        String sql = "from LichTrinh where trangThai = :trangThai";
+        return em.createQuery(sql, LichTrinh.class).setParameter("trangThai", trangThai).getResultList();
     }
 
-    public ArrayList<LichTrinh> traCuuDSLichTrinh(String MaGaDi, String MaGaDen) {
-        String sql = "Select * from LichTrinh where ma_ga_di = ? and ma_ga_den = ?";
-        return (ArrayList<LichTrinh>) em.createNativeQuery(sql, LichTrinh.class).setParameter(1, MaGaDi).setParameter(2, MaGaDen).getResultList();
+    public List<LichTrinh> traCuuDSLichTrinh(String MaGaDi, String MaGaDen) {
+        String sql = "from LichTrinh where gaDi.maGa = :maGaDi and gaDen.maGa = :maGaDen";
+        return em.createQuery(sql, LichTrinh.class).setParameter("maGaDi", MaGaDi).setParameter("maGaDen", MaGaDen).getResultList();
     }
 
-    public ArrayList<LichTrinh> traCuuDSLichTrinh(String MaGaDi, String MaGaDen, LocalDate ngayDi) {
-        String sql = "Select * from LichTrinh where ma_ga_di = ? and ma_ga_den = ? and year(thoi_gian_khoi_hanh) = ? and month(thoi_gian_khoi_hanh) = ? and day(thoi_gian_khoi_hanh) = ?";
-        return (ArrayList<LichTrinh>) em.createNativeQuery(sql, LichTrinh.class).setParameter(1, MaGaDi).setParameter(2, MaGaDen).setParameter(3, ngayDi.getYear()).setParameter(4, ngayDi.getMonth().getValue()).setParameter(5, ngayDi.getDayOfMonth()).getResultList();
+    public List<LichTrinh> traCuuDSLichTrinh(String MaGaDi, String MaGaDen, LocalDate ngayDi) {
+        String sql = "from LichTrinh where gaDi.maGa = :maGaDi and gaDen.maGa = :maGaDen and year(thoiGianKhoiHanh) = :nam and month(thoiGianKhoiHanh) = :thang and day(thoiGianKhoiHanh) = :ngay";
+        return em.createQuery(sql, LichTrinh.class).setParameter("maGaDi", MaGaDi).setParameter("maGaDen", MaGaDen).setParameter("nam", ngayDi.getYear()).setParameter("thang", ngayDi.getMonth().getValue()).setParameter("ngay", ngayDi.getDayOfMonth()).getResultList();
     }
 
-    public ArrayList<LichTrinh> traCuuDSLichTrinhSauNgayHienTai() {
-        String sql = "Select * from LichTrinh where thoi_gian_khoi_hanh > ?";
-        return (ArrayList<LichTrinh>) em.createNativeQuery(sql, LichTrinh.class).setParameter(1, Timestamp.valueOf(LocalDateTime.now())).getResultList();
+    public List<LichTrinh> traCuuDSLichTrinhSauNgayHienTai() {
+        String sql = "from LichTrinh where thoiGianKhoiHanh > :thoiGianHienTai";
+        return em.createQuery(sql, LichTrinh.class).setParameter("thoiGianHienTai", LocalDateTime.now()).getResultList();
     }
 
-    public ArrayList<LichTrinh> traCuuDSLichTrinhTheoNgay(LocalDate ngayDi) {
-        String sql = "Select * from LichTrinh where year(thoi_gian_khoi_hanh) = ? and month(thoi_gian_khoi_hanh) = ? and day(thoi_gian_khoi_hanh) = ?";
-        return (ArrayList<LichTrinh>) em.createNativeQuery(sql, LichTrinh.class).setParameter(1, ngayDi.getYear()).setParameter(2, ngayDi.getMonth().getValue()).setParameter(3, ngayDi.getDayOfMonth()).getResultList();
+    public List<LichTrinh> traCuuDSLichTrinhTheoNgay(LocalDate ngayDi) {
+        String sql = "from LichTrinh where year(thoiGianKhoiHanh) = :nam and month(thoiGianKhoiHanh) = :thang and day(thoiGianKhoiHanh) = :ngay";
+        return em.createQuery(sql, LichTrinh.class).setParameter("nam", ngayDi.getYear()).setParameter("thang", ngayDi.getMonth().getValue()).setParameter("ngay", ngayDi.getDayOfMonth()).getResultList();
     }
 
-    public int getSoLuongChoConTrong(String maLichTrinh) {
-        int soLuongChoConTrong = 0;
-        String sql = "select count(*) from LichTrinh a join ChiTietLichTrinh b on a.ma_lich_trinh = b.ma_lich_trinh join ChoNgoi c on b.ma_cho = c.ma_cho where a.ma_lich_trinh= ? and b.trang_thai = 1";
-        soLuongChoConTrong = (int) em.createNativeQuery(sql, LichTrinh.class).setParameter(1, maLichTrinh).getSingleResult();
-        return soLuongChoConTrong;
+    public Long getSoLuongChoConTrong(String maLichTrinh) {
+        String sql = "select count(*) from ChiTietLichTrinh where lichTrinh.maLichTrinh = :maLichTrinh and trangThai = true";
+        return em.createQuery(sql, Long.class).setParameter("maLichTrinh", maLichTrinh).getSingleResult();
+
     }
 
     public boolean updateTrangThaiChuyenTau(String maLichTrinh, boolean trangThai) {
         return executeTransaction(() -> {
-            String sql = "UPDATE LichTrinh SET trang_thai = ? WHERE ma_lich_trinh = ?";
-            em.createNativeQuery(sql, LichTrinh.class)
-                    .setParameter(1, trangThai)
-                    .setParameter(2, maLichTrinh)
-                    .executeUpdate();
+            LichTrinh lichTrinh = em.find(LichTrinh.class, maLichTrinh);
+            if (lichTrinh != null) {
+                lichTrinh.setTrangThai(trangThai);
+                em.merge(lichTrinh);
+            }
         });
     }
 
     public boolean updateTrangThaiCT(boolean trangThai) {
         return executeTransaction(() -> {
-            String sql = "UPDATE LichTrinh SET trang_thai = ?";
-            em.createNativeQuery(sql)
-                    .setParameter(1, trangThai)
+            String sql = "UPDATE LichTrinh SET trangThai = :trangThai";
+            em.createQuery(sql)
+                    .setParameter("trangThai", trangThai)
                     .executeUpdate();
         });
     }
@@ -85,15 +82,15 @@ public class LichTrinh_DAO {
 
     public boolean updateInfo(LichTrinh lichTrinh) {
         return executeTransaction(() -> {
-            String sql = "UPDATE LichTrinh SET ma_ga_di = ?, ma_ga_den = ?, thoi_gian_khoi_hanh = ?, thoi_gian_du_kien_den = ?, trang_thai = ? WHERE ma_lich_trinh = ?";
-            em.createNativeQuery(sql)
-                    .setParameter(1, lichTrinh.getGaDi().getMaGa())
-                    .setParameter(2, lichTrinh.getGaDen().getMaGa())
-                    .setParameter(3, Timestamp.valueOf(lichTrinh.getThoiGianKhoiHanh()))
-                    .setParameter(4, Timestamp.valueOf(lichTrinh.getThoiGianDuKienDen()))
-                    .setParameter(5, lichTrinh.isTrangThai())
-                    .setParameter(6, lichTrinh.getMaLichTrinh())
-                    .executeUpdate();
+            LichTrinh existingLichTrinh = em.find(LichTrinh.class, lichTrinh.getMaLichTrinh());
+            if (existingLichTrinh != null) {
+                existingLichTrinh.setThoiGianKhoiHanh(lichTrinh.getThoiGianKhoiHanh());
+                existingLichTrinh.setThoiGianDuKienDen(lichTrinh.getThoiGianDuKienDen());
+                existingLichTrinh.setGaDi(lichTrinh.getGaDi());
+                existingLichTrinh.setGaDen(lichTrinh.getGaDen());
+                existingLichTrinh.setTrangThai(lichTrinh.isTrangThai());
+                em.merge(existingLichTrinh);
+            }
         });
     }
 
@@ -102,11 +99,11 @@ public class LichTrinh_DAO {
     }
 
     public LichTrinh getOne(String maLichTrinh) {
-        LichTrinh lt = em.find(LichTrinh.class, maLichTrinh);
-        return lt;
+        return em.find(LichTrinh.class, maLichTrinh);
     }
 
     private boolean executeTransaction(Runnable action) {
+        EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
             action.run();

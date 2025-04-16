@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Setter
@@ -19,7 +20,7 @@ import java.util.Objects;
         @UniqueConstraint(name = "UQ__socccd__kh", columnNames = {"socccd"}),
         @UniqueConstraint(name = "UQ__sdt__kh", columnNames = {"sdt"})
 })
-public class KhachHang {
+public class KhachHang implements Serializable {
     @Id
 //    @ColumnDefault("[dbo].[auto_idkh]()")
     @Column(name = "ma_kh", nullable = false, columnDefinition = "char(10)")
