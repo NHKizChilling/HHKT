@@ -53,6 +53,15 @@ public class HoaDon implements Serializable {
         this.maHD = maHD;
     }
 
+    public HoaDon(String maHD, NhanVien nhanVien, KhachHang khachHang, LocalDateTime ngayLapHoaDon, KhuyenMai khuyenMai, boolean trangThai) {
+        this.maHD = maHD;
+        this.nhanVien = nhanVien;
+        this.khachHang = khachHang;
+        this.ngayLapHoaDon = ngayLapHoaDon;
+        this.khuyenMai = khuyenMai;
+        this.trangThai = trangThai;
+    }
+
     public void tinhTongTien(ArrayList<ChiTietHoaDon> dsChiTietHoaDon) {
         double tongTien = 0;
         double phiDichVu = dsChiTietHoaDon.size() * 2000;
