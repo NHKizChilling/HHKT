@@ -43,6 +43,14 @@ public class CaLamViec implements Serializable {
     @Column(name = "trang_thai_ca")
     private boolean trangThaiCa;
 
+    public CaLamViec(NhanVien nhanVien, LocalDateTime gioMoCa, double tienDauCa, String ghiChu, boolean trangThaiCa) {
+        this.nhanVien = nhanVien;
+        this.gioMoCa = gioMoCa;
+        this.tienDauCa = tienDauCa;
+        this.ghiChu = ghiChu;
+        this.trangThaiCa = trangThaiCa;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

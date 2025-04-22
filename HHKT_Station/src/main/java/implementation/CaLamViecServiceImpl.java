@@ -27,6 +27,11 @@ public class CaLamViecServiceImpl extends UnicastRemoteObject implements CaLamVi
     }
 
     @Override
+    public CaLamViec getCaLamViecMoiNhatCuaNhanVien(String maNV) throws RemoteException {
+        return caLamViec_DAO.getCaLamViecMoiNhatCuaNhanVien(maNV);
+    }
+
+    @Override
     public boolean create(CaLamViec caLamViec) throws RemoteException {
         return caLamViec_DAO.create(caLamViec);
     }

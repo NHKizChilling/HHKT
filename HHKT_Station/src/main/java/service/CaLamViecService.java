@@ -12,6 +12,8 @@ public interface CaLamViecService extends Remote {
 
     CaLamViec getCaLamViec(String maNV, LocalDateTime gioMoCa) throws RemoteException;
 
+    CaLamViec getCaLamViecMoiNhatCuaNhanVien(String maNV) throws RemoteException;
+
     boolean create(CaLamViec caLamViec) throws RemoteException;
 
     boolean update(CaLamViec caLamViec) throws RemoteException;

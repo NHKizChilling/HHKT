@@ -28,6 +28,14 @@ public class CaLamViec_DAO {
                 .getSingleResult();
     }
 
+    public CaLamViec getCaLamViecMoiNhatCuaNhanVien(String maNV) {
+        String sql = "from CaLamViec where nhanVien.maNV = :manv ORDER BY gioMoCa DESC";
+        return em.createQuery(sql, CaLamViec.class)
+                .setParameter("manv", maNV)
+                .setMaxResults(1)
+                .getSingleResult();
+    }
+
     public boolean create(CaLamViec caLamViec) {
         return executeTransaction(() -> em.persist(caLamViec));
     }
