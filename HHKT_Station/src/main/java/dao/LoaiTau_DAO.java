@@ -16,7 +16,11 @@ public class LoaiTau_DAO {
 
     public List<LoaiTau> getAllLoaiTau() {
 
-        return em.createQuery("from LoaiTau", LoaiTau.class).getResultList();
+        try {
+            return em.createQuery("from LoaiTau", LoaiTau.class).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean create(LoaiTau loaiTau) {
@@ -35,8 +39,8 @@ public class LoaiTau_DAO {
     }
 
     public LoaiTau getLoaiTauTheoMa(String maLoaiTau) {
-        String sql = "from LoaiTau where maLoaiTau = :maLoaiTau";
-        return em.createQuery(sql, LoaiTau.class).setParameter("maLoaiTau", maLoaiTau).getSingleResult();
+
+        return em.find(LoaiTau.class, maLoaiTau);
     }
 
     private boolean executeTransaction(Runnable action) {
@@ -50,7 +54,6 @@ public class LoaiTau_DAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
             return false;
         }
     }

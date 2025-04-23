@@ -16,7 +16,11 @@ public class NhanVien_DAO {
 
     public List<NhanVien> getAll() {
 
-        return em.createQuery("from NhanVien", NhanVien.class).getResultList();
+        try {
+            return em.createQuery("from NhanVien", NhanVien.class).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean create(NhanVien nv) {
@@ -37,12 +41,22 @@ public class NhanVien_DAO {
 
     public List<NhanVien> getDSQuanLy() {
         String sql = "from NhanVien where chucVu = 'Quản lý'";
-        return em.createQuery(sql, NhanVien.class).getResultList();
+
+        try {
+            return em.createQuery(sql, NhanVien.class).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<NhanVien> getDSNhanVien() {
         String sql = "from NhanVien where chucVu = 'Nhân viên'";
-        return em.createQuery(sql, NhanVien.class).getResultList();
+
+        try {
+            return em.createQuery(sql, NhanVien.class).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean updateInfo(NhanVien nv) {
@@ -64,22 +78,31 @@ public class NhanVien_DAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
             return false;
         }
     }
 
     public NhanVien getNhanVienTheoTen(String tenNV) {
         String sql = "from NhanVien where tenNV = :ten";
-        return em.createQuery(sql, NhanVien.class)
-                .setParameter("ten", tenNV)
-                .getSingleResult();
+
+        try {
+            return em.createQuery(sql, NhanVien.class)
+                    .setParameter("ten", tenNV)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public NhanVien getNhanVienTheoSDT(String sdt) {
         String sql = "from NhanVien where sdt = :sdt";
-        return em.createQuery(sql, NhanVien.class)
-                .setParameter("sdt", sdt)
-                .getSingleResult();
+
+        try {
+            return em.createQuery(sql, NhanVien.class)
+                    .setParameter("sdt", sdt)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

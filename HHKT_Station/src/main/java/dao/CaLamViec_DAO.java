@@ -16,24 +16,37 @@ public class CaLamViec_DAO {
     }
 
     public List<CaLamViec> getAllCaLamViec() {
+        String sql = "from CaLamViec";
 
-        return em.createQuery("from CaLamViec ", CaLamViec.class).getResultList();
+        try {
+            return em.createQuery(sql, CaLamViec.class).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public CaLamViec getCaLamViec(String maNV, LocalDateTime gioMoCa) {
         String sql = "from CaLamViec where nhanVien.maNV = :manv and gioMoCa = :giomoca";
-        return em.createQuery(sql, CaLamViec.class)
-                .setParameter("manv", maNV)
-                .setParameter("giomoca", gioMoCa)
-                .getSingleResult();
+        try {
+            return em.createQuery(sql, CaLamViec.class)
+                    .setParameter("manv", maNV)
+                    .setParameter("giomoca", gioMoCa)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public CaLamViec getCaLamViecMoiNhatCuaNhanVien(String maNV) {
         String sql = "from CaLamViec where nhanVien.maNV = :manv ORDER BY gioMoCa DESC";
-        return em.createQuery(sql, CaLamViec.class)
-                .setParameter("manv", maNV)
-                .setMaxResults(1)
-                .getSingleResult();
+        try {
+            return em.createQuery(sql, CaLamViec.class)
+                    .setParameter("manv", maNV)
+                    .setMaxResults(1)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean create(CaLamViec caLamViec) {
@@ -62,7 +75,6 @@ public class CaLamViec_DAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
             return false;
         }
     }

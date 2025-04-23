@@ -16,7 +16,11 @@ public class CT_HoaDon_DAO {
 
     public List<ChiTietHoaDon> getAllCT_HoaDon() {
 
-        return em.createQuery("from ChiTietHoaDon", ChiTietHoaDon.class).getResultList();
+        try {
+            return em.createQuery("from ChiTietHoaDon ", ChiTietHoaDon.class).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean create(ChiTietHoaDon cthd) {
@@ -33,24 +37,39 @@ public class CT_HoaDon_DAO {
 
     public ChiTietHoaDon getCT_HoaDon(String maHD, String maVe) {
         String sql = "from ChiTietHoaDon where hoaDon.maHD = :mahd and ve.maVe = :mave";
-        return em.createQuery(sql, ChiTietHoaDon.class)
-                .setParameter("mahd", maHD)
-                .setParameter("mave", maVe)
-                .getSingleResult();
+
+        try {
+            return em.createQuery(sql, ChiTietHoaDon.class)
+                    .setParameter("mahd", maHD)
+                    .setParameter("mave", maVe)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public ChiTietHoaDon getCT_HoaDonTheoMaVe(String maVe) {
         String sql = "from ChiTietHoaDon where ve.maVe = :mave";
-        return em.createQuery(sql, ChiTietHoaDon.class)
-                .setParameter("mave", maVe)
-                .getSingleResult();
+
+        try {
+            return em.createQuery(sql, ChiTietHoaDon.class)
+                    .setParameter("mave", maVe)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<ChiTietHoaDon> getCT_HoaDon(String maHD) {
         String sql = "from ChiTietHoaDon where hoaDon.maHD = :mahd";
-        return em.createQuery(sql, ChiTietHoaDon.class)
-                .setParameter("mahd", maHD)
-                .getResultList();
+
+        try {
+            return em.createQuery(sql, ChiTietHoaDon.class)
+                    .setParameter("mahd", maHD)
+                    .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private boolean executeTransaction(Runnable action) {
@@ -64,7 +83,6 @@ public class CT_HoaDon_DAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
             return false;
         }
     }

@@ -16,14 +16,16 @@ public class ChuyenTau_DAO {
 
     public List<ChuyenTau> getAll() {
 
-        return em.createQuery("from ChuyenTau", ChuyenTau.class).getResultList();
+        try {
+            return em.createQuery("from ChuyenTau", ChuyenTau.class).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public ChuyenTau getChuyenTauTheoID(String soHieuTau) {
-        String sql = "from ChuyenTau where soHieuTau = :soHieuTau";
-        return em.createQuery(sql, ChuyenTau.class)
-                .setParameter("soHieuTau", soHieuTau)
-                .getSingleResult();
+
+        return em.find(ChuyenTau.class, soHieuTau);
     }
 
 
@@ -47,7 +49,6 @@ public class ChuyenTau_DAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
             return false;
         }
     }

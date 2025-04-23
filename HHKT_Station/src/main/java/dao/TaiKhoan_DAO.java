@@ -16,7 +16,11 @@ public class TaiKhoan_DAO {
 
     public List<TaiKhoan> getAllTaiKhoan() {
 
-        return em.createQuery("from TaiKhoan ", TaiKhoan.class).getResultList();
+        try {
+            return em.createQuery("from TaiKhoan ", TaiKhoan.class).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean create(TaiKhoan tk) {
@@ -44,9 +48,8 @@ public class TaiKhoan_DAO {
     }
 
     public TaiKhoan getTaiKhoanTheoMaNV(String maNhanVien) {
-        return em.createQuery("FROM TaiKhoan tk WHERE tk.nhanVien.maNV = :maNV", TaiKhoan.class)
-                .setParameter("maNV", maNhanVien)
-                .getSingleResult();
+
+        return em.find(TaiKhoan.class, maNhanVien);
     }
 
     private boolean executeTransaction(Runnable action) {
@@ -60,7 +63,6 @@ public class TaiKhoan_DAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
             return false;
         }
     }

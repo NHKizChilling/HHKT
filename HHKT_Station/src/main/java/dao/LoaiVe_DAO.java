@@ -16,7 +16,11 @@ public class LoaiVe_DAO {
 
     public List<LoaiVe> getAllLoaiVe() {
 
-        return em.createQuery("from LoaiVe", LoaiVe.class).getResultList();
+        try {
+            return em.createQuery("from LoaiVe", LoaiVe.class).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean create(LoaiVe loaiVe) {
@@ -38,12 +42,17 @@ public class LoaiVe_DAO {
 
     public LoaiVe getLoaiVeTheoTen(String tenLoai) {
         String sql = "from LoaiVe where tenLoaiVe = :tenLoaiVe";
-        return em.createQuery(sql, LoaiVe.class).setParameter("tenLoaiVe", tenLoai).getSingleResult();
+
+        try {
+            return em.createQuery(sql, LoaiVe.class).setParameter("tenLoaiVe", tenLoai).getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public LoaiVe getLoaiVeTheoMa(String maLoaiVe) {
-        String sql = "from LoaiVe where maLoaiVe = :maLoaiVe";
-        return em.createQuery(sql, LoaiVe.class).setParameter("maLoaiVe", maLoaiVe).getSingleResult();
+
+        return em.find(LoaiVe.class, maLoaiVe);
     }
 
     private boolean executeTransaction(Runnable action) {
@@ -57,7 +66,6 @@ public class LoaiVe_DAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
             return false;
         }
     }

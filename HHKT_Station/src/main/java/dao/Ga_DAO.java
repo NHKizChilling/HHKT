@@ -16,7 +16,11 @@ public class Ga_DAO {
 
     public List<Ga> getAllGa() {
 
-        return em.createQuery("from Ga", Ga.class).getResultList();
+        try {
+            return em.createQuery("from Ga", Ga.class).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean create(Ga ga) {
@@ -35,18 +39,28 @@ public class Ga_DAO {
     }
 
     public Ga getGaTheoMaGa(String maGa) {
-        String sql = "from Ga where maGa = :maGa";
-        return em.createQuery(sql, Ga.class).setParameter("maGa", maGa).getSingleResult();
+
+        return em.find(Ga.class, maGa);
     }
 
     public Ga getGaTheoTenGa(String tenGa) {
         String sql = "from Ga where tenGa = :tenGa";
-        return em.createQuery(sql, Ga.class).setParameter("tenGa", tenGa).getSingleResult();
+
+        try {
+            return em.createQuery(sql, Ga.class).setParameter("tenGa", tenGa).getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public double KhoangCach(String maGa){
         String sql = "Select khoangCach from Ga where maGa = :maGa";
-        return em.createQuery(sql, Double.class).setParameter("maGa", maGa).getSingleResult();
+
+        try {
+            return em.createQuery(sql, Ga.class).setParameter("maGa", maGa).getSingleResult().getKhoangCach();
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     private boolean executeTransaction(Runnable action) {
@@ -60,7 +74,6 @@ public class Ga_DAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
             return false;
         }
     }

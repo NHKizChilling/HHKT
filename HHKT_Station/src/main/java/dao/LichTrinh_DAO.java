@@ -18,43 +18,102 @@ public class LichTrinh_DAO {
 
     public List<LichTrinh> getAll() {
 
-        return em.createQuery("from LichTrinh", LichTrinh.class).getResultList();
+        try {
+            return em.createQuery("from LichTrinh", LichTrinh.class).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public LichTrinh getLichTrinhTheoID(String maLichTrinh) {
         String sql = " from LichTrinh where maLichTrinh = :maLichTrinh";
-        return em.createQuery(sql, LichTrinh.class).setParameter("maLichTrinh", maLichTrinh).getSingleResult();
+
+        try {
+            return em.createQuery(sql, LichTrinh.class)
+                    .setParameter("maLichTrinh", maLichTrinh)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<LichTrinh> getDSLichTrinhTheoTrangThai(boolean trangThai) {
         String sql = "from LichTrinh where trangThai = :trangThai";
-        return em.createQuery(sql, LichTrinh.class).setParameter("trangThai", trangThai).getResultList();
+
+        try {
+            return em.createQuery(sql, LichTrinh.class)
+                    .setParameter("trangThai", trangThai)
+                    .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<LichTrinh> traCuuDSLichTrinh(String MaGaDi, String MaGaDen) {
         String sql = "from LichTrinh where gaDi.maGa = :maGaDi and gaDen.maGa = :maGaDen";
-        return em.createQuery(sql, LichTrinh.class).setParameter("maGaDi", MaGaDi).setParameter("maGaDen", MaGaDen).getResultList();
+
+        try {
+            return em.createQuery(sql, LichTrinh.class)
+                    .setParameter("maGaDi", MaGaDi)
+                    .setParameter("maGaDen", MaGaDen)
+                    .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<LichTrinh> traCuuDSLichTrinh(String MaGaDi, String MaGaDen, LocalDate ngayDi) {
         String sql = "from LichTrinh where gaDi.maGa = :maGaDi and gaDen.maGa = :maGaDen and year(thoiGianKhoiHanh) = :nam and month(thoiGianKhoiHanh) = :thang and day(thoiGianKhoiHanh) = :ngay";
-        return em.createQuery(sql, LichTrinh.class).setParameter("maGaDi", MaGaDi).setParameter("maGaDen", MaGaDen).setParameter("nam", ngayDi.getYear()).setParameter("thang", ngayDi.getMonth().getValue()).setParameter("ngay", ngayDi.getDayOfMonth()).getResultList();
+
+        try {
+            return em.createQuery(sql, LichTrinh.class)
+                    .setParameter("maGaDi", MaGaDi)
+                    .setParameter("maGaDen", MaGaDen)
+                    .setParameter("nam", ngayDi.getYear())
+                    .setParameter("thang", ngayDi.getMonth().getValue())
+                    .setParameter("ngay", ngayDi.getDayOfMonth())
+                    .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<LichTrinh> traCuuDSLichTrinhSauNgayHienTai() {
         String sql = "from LichTrinh where thoiGianKhoiHanh > :thoiGianHienTai";
-        return em.createQuery(sql, LichTrinh.class).setParameter("thoiGianHienTai", LocalDateTime.now()).getResultList();
+
+        try {
+            return em.createQuery(sql, LichTrinh.class)
+                    .setParameter("thoiGianHienTai", LocalDateTime.now())
+                    .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<LichTrinh> traCuuDSLichTrinhTheoNgay(LocalDate ngayDi) {
         String sql = "from LichTrinh where year(thoiGianKhoiHanh) = :nam and month(thoiGianKhoiHanh) = :thang and day(thoiGianKhoiHanh) = :ngay";
-        return em.createQuery(sql, LichTrinh.class).setParameter("nam", ngayDi.getYear()).setParameter("thang", ngayDi.getMonth().getValue()).setParameter("ngay", ngayDi.getDayOfMonth()).getResultList();
+
+        try {
+            return em.createQuery(sql, LichTrinh.class)
+                    .setParameter("nam", ngayDi.getYear())
+                    .setParameter("thang", ngayDi.getMonth().getValue())
+                    .setParameter("ngay", ngayDi.getDayOfMonth())
+                    .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public Long getSoLuongChoConTrong(String maLichTrinh) {
         String sql = "select count(*) from ChiTietLichTrinh where lichTrinh.maLichTrinh = :maLichTrinh and trangThai = true";
-        return em.createQuery(sql, Long.class).setParameter("maLichTrinh", maLichTrinh).getSingleResult();
 
+        try {
+            return em.createQuery(sql, Long.class)
+                    .setParameter("maLichTrinh", maLichTrinh)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean updateTrangThaiChuyenTau(String maLichTrinh, boolean trangThai) {
@@ -99,6 +158,7 @@ public class LichTrinh_DAO {
     }
 
     public LichTrinh getOne(String maLichTrinh) {
+
         return em.find(LichTrinh.class, maLichTrinh);
     }
 
@@ -113,7 +173,6 @@ public class LichTrinh_DAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
             return false;
         }
     }

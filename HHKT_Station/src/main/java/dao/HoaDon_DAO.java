@@ -1,11 +1,14 @@
 package dao;
 
 import entity.HoaDon;
+import entity.KhachHang;
+import entity.NhanVien;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import util.JPAUtil;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class HoaDon_DAO {
@@ -17,36 +20,61 @@ public class HoaDon_DAO {
 
     public List<HoaDon> getAllHoaDon() {
 
-        return em.createQuery("from HoaDon ", HoaDon.class).getResultList();
+        try {
+            return em.createQuery("from HoaDon ", HoaDon.class).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public HoaDon getHoaDonTheoMa(String maHoaDon) {
+
         return em.find(HoaDon.class, maHoaDon);
     }
 
     public List<HoaDon> getHoaDonTheoNV(String maNV, LocalDate ngayLap) {
         String sql = "from HoaDon where nhanVien.maNV = :maNV and YEAR(ngayLapHoaDon) = :nam and MONTH(ngayLapHoaDon) = :thang and DAY(ngayLapHoaDon) = :ngay";
-        return em.createQuery(sql, HoaDon.class)
-                .setParameter("maNV", maNV)
-                .setParameter("nam", ngayLap.getYear())
-                .setParameter("thang", ngayLap.getMonthValue())
-                .setParameter("ngay", ngayLap.getDayOfMonth())
-                .getResultList();
+
+        try {
+            return em.createQuery(sql, HoaDon.class)
+                    .setParameter("maNV", maNV)
+                    .setParameter("nam", ngayLap.getYear())
+                    .setParameter("thang", ngayLap.getMonthValue())
+                    .setParameter("ngay", ngayLap.getDayOfMonth())
+                    .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<HoaDon> getHoaDonTheoKH(String maKH) {
         String sql = "from HoaDon where khachHang.maKH = :maKH";
-        return em.createQuery(sql, HoaDon.class).setParameter("maKH", maKH).getResultList();
+
+        try {
+            return em.createQuery(sql, HoaDon.class).setParameter("maKH", maKH).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<HoaDon> getHoaDonTheoNV(String maNV) {
         String sql = "from HoaDon where nhanVien.maNV = :maNV";
-        return em.createQuery(sql, HoaDon.class).setParameter("maNV", maNV).getResultList();
+
+        try {
+            return em.createQuery(sql, HoaDon.class).setParameter("maNV", maNV).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public HoaDon getHoaDonVuaTao() {
         String sql = "from HoaDon where trangThai = false and tongTien = 0";
-        return em.createQuery(sql, HoaDon.class).getSingleResult();
+
+        try {
+            return em.createQuery(sql, HoaDon.class).getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean create(HoaDon hoaDon) {
@@ -67,7 +95,6 @@ public class HoaDon_DAO {
 
             em.getTransaction().commit();
         } catch (Exception e) {
-            e.printStackTrace();
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
@@ -103,7 +130,12 @@ public class HoaDon_DAO {
 
     public List<HoaDon> getDSHDLuuTam() {
         String sql = "from HoaDon where trangThai = false and tongTien != 0";
-        return em.createQuery(sql, HoaDon.class).getResultList();
+
+        try {
+            return em.createQuery(sql, HoaDon.class).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean update(HoaDon hoaDon) {
@@ -117,24 +149,41 @@ public class HoaDon_DAO {
 
     public List<HoaDon> getDSHDTheoNam(String nam) {
         String sql = "from HoaDon where YEAR(ngayLapHoaDon) = :nam";
-        return em.createQuery(sql, HoaDon.class).setParameter("nam", nam).getResultList();
+
+        try {
+            return em.createQuery(sql, HoaDon.class)
+                    .setParameter("nam", nam)
+                    .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<HoaDon> getDSHDTheoThang(int thang, int nam) {
         String sql = "from HoaDon where YEAR(ngayLapHoaDon) = :nam and MONTH(ngayLapHoaDon) = :thang";
-        return em.createQuery(sql, HoaDon.class)
-                .setParameter("nam", nam)
-                .setParameter("thang", thang)
-                .getResultList();
+
+        try {
+            return em.createQuery(sql, HoaDon.class)
+                    .setParameter("nam", nam)
+                    .setParameter("thang", thang)
+                    .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<HoaDon> getDSHDTheoNgay(LocalDate ngayLap) {
         String sql = "from HoaDon where YEAR(ngayLapHoaDon) = :nam and MONTH(ngayLapHoaDon) = :thang and DAY(ngayLapHoaDon) = :ngay";
-        return em.createQuery(sql, HoaDon.class)
-                .setParameter("nam", ngayLap.getYear())
-                .setParameter("thang", ngayLap.getMonthValue())
-                .setParameter("ngay", ngayLap.getDayOfMonth())
-                .getResultList();
+
+        try {
+            return em.createQuery(sql, HoaDon.class)
+                    .setParameter("nam", ngayLap.getYear())
+                    .setParameter("thang", ngayLap.getMonthValue())
+                    .setParameter("ngay", ngayLap.getDayOfMonth())
+                    .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private boolean executeTransaction(Runnable action) {
@@ -148,7 +197,6 @@ public class HoaDon_DAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
             return false;
         }
     }

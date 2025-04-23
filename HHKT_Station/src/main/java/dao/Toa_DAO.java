@@ -16,17 +16,28 @@ public class Toa_DAO {
 
     public List<Toa> getAllToa() {
 
-        return em.createQuery("from Toa", Toa.class).getResultList();
+        try {
+            return em.createQuery("from Toa", Toa.class).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<Toa> getAllToaTheoChuyenTau(String soHieuTau) {
         String sql = "from Toa where soHieuTau.id = :soHieuTau order by sttToa";
-        return em.createQuery(sql, Toa.class).setParameter("soHieuTau", soHieuTau).getResultList();
+
+        try {
+            return em.createQuery(sql, Toa.class)
+                    .setParameter("soHieuTau", soHieuTau)
+                    .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public Toa getToaTheoID(String maToa) {
-        String sql = "from Toa where maToa = :maToa";
-        return em.createQuery(sql, Toa.class).setParameter("maToa", maToa).getSingleResult();
+
+        return em.find(Toa.class, maToa);
     }
 
     public boolean create(Toa toa) {
@@ -55,7 +66,6 @@ public class Toa_DAO {
             if (tx.isActive()) {
                 tx.rollback();
             }
-            e.printStackTrace();
             return false;
         }
     }

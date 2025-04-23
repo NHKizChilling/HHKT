@@ -16,18 +16,27 @@ public class Ve_DAO {
 
     public List<Ve> getAllVe() {
 
-        return em.createQuery("from Ve", Ve.class).getResultList();
+        try {
+            return em.createQuery("from Ve", Ve.class).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public Ve getVeTheoID(String maVe) {
-        String sql = "from Ve where maVe = :maVe";
-        return em.createQuery(sql, Ve.class).setParameter("maVe", maVe).getSingleResult();
+
+        return em.find(Ve.class, maVe);
     }
 
     public Ve getLaiVe() {
         // Lấy vé cuối cùng đã bán
-        String sql = "from Ve where tinhTrangVe = 'DaBan' ORDER BY maVe DESC LIMIT 1";
-        return em.createQuery(sql, Ve.class).getSingleResult();
+        String sql = "from Ve where tinhTrangVe = 'DaBan' ORDER BY maVe DESC";
+
+        try {
+            return em.createQuery(sql, Ve.class).getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean create(Ve ve) {
@@ -48,12 +57,22 @@ public class Ve_DAO {
 
     public List<Ve> getDSVeTheoMaKH(String maKH) {
         String sql = "from Ve where khachHang.maKH = :makh";
-        return em.createQuery(sql, Ve.class).setParameter("makh", maKH).getResultList();
+
+        try {
+            return em.createQuery(sql, Ve.class).setParameter("makh", maKH).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<Ve> getVeTheoTinhTrang(String tinhTrangVe) {
         String sql = "from Ve where tinhTrangVe = :tinhTrangVe";
-        return em.createQuery(sql, Ve.class).setParameter("tinhTrangVe", tinhTrangVe).getResultList();
+
+        try {
+            return em.createQuery(sql, Ve.class).setParameter("tinhTrangVe", tinhTrangVe).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private boolean executeTransaction(Runnable action) {
@@ -67,7 +86,6 @@ public class Ve_DAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
             return false;
         }
     }

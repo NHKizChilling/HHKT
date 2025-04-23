@@ -16,7 +16,11 @@ public class CT_LichTrinh_DAO {
 
     public List<ChiTietLichTrinh> getAllChiTietLichTrinh() {
 
-        return em.createQuery("from ChiTietLichTrinh", ChiTietLichTrinh.class).getResultList();
+        try {
+            return em.createQuery("from ChiTietLichTrinh", ChiTietLichTrinh.class).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean create(ChiTietLichTrinh ctlt) {
@@ -38,12 +42,12 @@ public class CT_LichTrinh_DAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
             return false;
         }
     }
 
     public boolean updateCTLT(ChiTietLichTrinh ctlt, boolean trangThai) {
+
         return executeTransaction(() -> {
             String sql = "Update ChiTietLichTrinh set trangThai = :trangThai where choNgoi.maCho = :maCho and lichTrinh.maLichTrinh = :malt";
             em.createQuery(sql, ChiTietLichTrinh.class)
@@ -63,17 +67,27 @@ public class CT_LichTrinh_DAO {
 
     public List<ChiTietLichTrinh> getCtltTheoTrangThai(boolean trangThai) {
         String sql = "from ChiTietLichTrinh where trangThai = :trangThai";
-        return em.createQuery(sql, ChiTietLichTrinh.class)
-                .setParameter("trangThai", trangThai)
-                .getResultList();
+
+        try {
+            return em.createQuery(sql, ChiTietLichTrinh.class)
+                    .setParameter("trangThai", trangThai)
+                    .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public ChiTietLichTrinh getCTLTTheoCN(String maLichTrinh, String maChoNgoi) {
         String sql = "from ChiTietLichTrinh where lichTrinh.maLichTrinh = :malt and choNgoi.maCho = :maCho";
-        return em.createQuery(sql, ChiTietLichTrinh.class)
-                .setParameter("malt", maLichTrinh)
-                .setParameter("maCho", maChoNgoi)
-                .getSingleResult();
+
+        try {
+            return em.createQuery(sql, ChiTietLichTrinh.class)
+                    .setParameter("malt", maLichTrinh)
+                    .setParameter("maCho", maChoNgoi)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean getTrangThaiCN(String maLichTrinh, String maCho) {
@@ -188,8 +202,13 @@ public class CT_LichTrinh_DAO {
 
     public List<ChiTietLichTrinh> getCtltTheoMaLichTrinh(String maLichTrinh) {
         String sql = "from ChiTietLichTrinh where lichTrinh.maLichTrinh = :malt";
-        return em.createQuery(sql, ChiTietLichTrinh.class)
-                .setParameter("malt", maLichTrinh)
-                .getResultList();
+
+        try {
+            return em.createQuery(sql, ChiTietLichTrinh.class)
+                    .setParameter("malt", maLichTrinh)
+                    .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

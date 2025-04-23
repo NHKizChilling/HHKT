@@ -16,30 +16,47 @@ public class KhuyenMai_DAO {
     }
 
     public List<KhuyenMai> getAllKM() {
-        return em.createQuery("from KhuyenMai", KhuyenMai.class).getResultList();
+
+        try {
+            return em.createQuery("from KhuyenMai", KhuyenMai.class).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<KhuyenMai> getKMHienCo() {
-        return em.createQuery("from KhuyenMai where trangThai = true", KhuyenMai.class).getResultList();
+
+        try {
+            return em.createQuery("from KhuyenMai where trangThai = true", KhuyenMai.class).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public KhuyenMai getKMTheoMa(String maKM) {
 
-        return em.createQuery("from KhuyenMai km where km.maKM = :maKM", KhuyenMai.class)
-                .setParameter("maKM", maKM)
-                .getSingleResult();
+        return em.find(KhuyenMai.class, maKM);
     }
 
     public KhuyenMai getKMGiamCaoNhat() {
 
-        return em.createQuery("from KhuyenMai where mucKM = (Select max(mucKM) from KhuyenMai)", KhuyenMai.class)
-                .getSingleResult();
+        try {
+            return em.createQuery("from KhuyenMai where mucKM = (select max(mucKM) from KhuyenMai)", KhuyenMai.class)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<KhuyenMai> getKMTheoNgay(LocalDate ngay) {
-        return em.createQuery("from KhuyenMai where ngayApDung <= :ngay and ngayHetHan >= :ngay", KhuyenMai.class)
-                .setParameter("ngay", ngay)
-                .getResultList();
+
+        try {
+            return em.createQuery("from KhuyenMai where ngayApDung <= :ngay and ngayHetHan >= :ngay", KhuyenMai.class)
+                    .setParameter("ngay", ngay)
+                    .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean themKhuyenMai(KhuyenMai km) {
@@ -93,7 +110,6 @@ public class KhuyenMai_DAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
             return false;
         }
     }

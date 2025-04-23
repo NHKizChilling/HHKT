@@ -16,37 +16,53 @@ public class ChoNgoi_DAO {
     }
 
     public List<ChoNgoi> getAllChoNgoi() {
+        try {
 
-        return em.createQuery("from ChoNgoi ", ChoNgoi.class).getResultList();
+            return em.createQuery("from ChoNgoi ", ChoNgoi.class).getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public ChoNgoi getChoNgoiTheoToa(String maToa, int sttCho) {
         String sql = "from ChoNgoi where toa.maToa = :maToa and sttCho = :stt";
-        return em.createQuery(sql, ChoNgoi.class)
-                .setParameter("maToa", maToa)
-                .setParameter("stt", sttCho)
-                .getSingleResult();
+        try {
+            return em.createQuery(sql, ChoNgoi.class)
+                    .setParameter("maToa", maToa)
+                    .setParameter("stt", sttCho)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public ChoNgoi getChoNgoiTheoMa(String maCho) {
-        String sql = "from ChoNgoi where maCho = :maCho";
-        return em.createQuery(sql, ChoNgoi.class)
-                .setParameter("maCho", maCho)
-                .getSingleResult();
+
+        return em.find(ChoNgoi.class, maCho);
     }
 
     public List<ChoNgoi> getDSChoNgoiTheoToa(String maToa) {
         String sql = "from ChoNgoi where toa.maToa = :maToa";
-        return em.createQuery(sql, ChoNgoi.class)
-                .setParameter("maToa", maToa)
-                .getResultList();
+
+        try {
+            return em.createQuery(sql, ChoNgoi.class)
+                    .setParameter("maToa", maToa)
+                    .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<ChoNgoi> getChoNgoiDaDat(LichTrinh lichTrinh) {
         String sql = "Select ctlt.choNgoi from ChiTietLichTrinh ctlt where ctlt.lichTrinh = :lichTrinh and trangThai = false";
-        return em.createQuery(sql, ChoNgoi.class)
-                .setParameter("lichTrinh", lichTrinh)
-                .getResultList();
+
+        try {
+            return em.createQuery(sql, ChoNgoi.class)
+                    .setParameter("lichTrinh", lichTrinh)
+                    .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean create(ChoNgoi choNgoi) {
@@ -75,7 +91,6 @@ public class ChoNgoi_DAO {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
             return false;
         }
     }
