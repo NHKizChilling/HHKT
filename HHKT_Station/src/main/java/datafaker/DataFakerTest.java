@@ -417,7 +417,7 @@ public class DataFakerTest {
                 KhachHang khachHang = createKhachHang(faker);
                 ve.setKhachHang(khachHang);
                 ve.setNgaySinh(LocalDate.now().minusYears(20).minusDays(random.nextInt(365 * 30)));
-                ve.setTenKH(khachHang.getTenKH());
+                ve.setTenHanhKhach(khachHang.getTenKH());
                 ve.setSoCCCD(khachHang.getSoCCCD());
                 ve.setChiTietLichTrinh(null); //set this later
                 ve.setLoaiVe(createLoaiVe(faker));

@@ -39,8 +39,8 @@ public class Ve implements Serializable {
     private LoaiVe loaiVe;
 
     @Nationalized
-    @Column(name = "ten_kh", length = 30)
-    private String tenKH;
+    @Column(name = "ten_hanh_khach", length = 30)
+    private String tenHanhKhach;
 
     @Column(name = "socccd", length = 12)
     private String soCCCD;

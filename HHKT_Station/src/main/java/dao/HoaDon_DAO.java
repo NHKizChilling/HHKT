@@ -68,10 +68,10 @@ public class HoaDon_DAO {
     }
 
     public HoaDon getHoaDonVuaTao() {
-        String sql = "from HoaDon where trangThai = false and tongTien = 0";
+        String sql = "from HoaDon where trangThai = false order by maHD desc";
 
         try {
-            return em.createQuery(sql, HoaDon.class).getSingleResult();
+            return em.createQuery(sql, HoaDon.class).setMaxResults(1).getSingleResult();
         } catch (Exception e) {
             return null;
         }

@@ -49,13 +49,18 @@ public class CT_LichTrinh_DAO {
     public boolean updateCTLT(ChiTietLichTrinh ctlt, boolean trangThai) {
 
         return executeTransaction(() -> {
-            String sql = "Update ChiTietLichTrinh set trangThai = :trangThai where choNgoi.maCho = :maCho and lichTrinh.maLichTrinh = :malt";
-            em.createQuery(sql, ChiTietLichTrinh.class)
-                    .setParameter("trangThai", trangThai)
-                    .setParameter("maCho", ctlt.getChoNgoi().getMaCho())
-                    .setParameter("malt", ctlt.getLichTrinh().getMaLichTrinh())
+            String sql = "Update ChiTietLichTrinh set trang_thai = ? where ma_cho = ? and ma_lich_trinh = ?";
+            em.createNativeQuery(sql)
+                    .setParameter(1, trangThai)
+                    .setParameter(2, ctlt.getChoNgoi().getMaCho())
+                    .setParameter(3, ctlt.getLichTrinh().getMaLichTrinh())
                     .executeUpdate();
         });
+    }
+
+    public static void main(String[] args) {
+        CT_LichTrinh_DAO dao = new CT_LichTrinh_DAO();
+        System.out.println(dao.updateCTLT(new ChiTietLichTrinh(new ChoNgoi("SE1T10CN1"), new LichTrinh("LTSE1200525HNSG")), false));
     }
 
     public boolean delete(String maLT, String maCN) {

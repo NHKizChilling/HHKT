@@ -43,6 +43,16 @@ public class Ve_DAO {
         return executeTransaction(() -> em.persist(ve));
     }
 
+
+    public String getAutoGenerateID() {
+        String sql = "SELECT dbo.auto_idve()";
+        try {
+            return em.createNativeQuery(sql, String.class).getSingleResult().toString();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public boolean update(Ve ve) {
         return executeTransaction(() -> em.merge(ve));
     }

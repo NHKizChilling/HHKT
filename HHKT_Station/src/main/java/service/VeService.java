@@ -11,6 +11,8 @@ public interface VeService extends Remote {
 
     Ve getVeTheoID(String maVe) throws RemoteException;
 
+    String getAutoGenerateID() throws RemoteException;
+
     Ve getLaiVe() throws RemoteException;
 
     boolean updateTinhTrangVe(String maVe, String tinhTrangVe) throws RemoteException;

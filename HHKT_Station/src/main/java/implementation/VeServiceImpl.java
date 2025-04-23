@@ -25,6 +25,11 @@ public class VeServiceImpl extends UnicastRemoteObject implements VeService {
         return ve_DAO.getVeTheoID(maVe);
     }
 
+    @Override
+    public String getAutoGenerateID() throws RemoteException {
+        return ve_DAO.getAutoGenerateID();
+    }
+
     public Ve getLaiVe() throws RemoteException {
         return ve_DAO.getLaiVe();
     }
