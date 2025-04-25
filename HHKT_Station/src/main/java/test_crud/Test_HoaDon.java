@@ -1,3 +1,5 @@
+package test_crud;
+
 import dao.*;
 import entity.*;
 import jakarta.persistence.EntityManager;
@@ -10,7 +12,6 @@ import java.util.List;
 
 public class Test_HoaDon {
     public static void main(String[] args) {
-        EntityManager em = Persistence.createEntityManagerFactory("HHKT Station").createEntityManager();
         Ve_DAO ve_dao = new Ve_DAO();
         HoaDon_DAO hoaDon_dao = new HoaDon_DAO();
         CT_HoaDon_DAO ct_hoaDon_dao = new CT_HoaDon_DAO();

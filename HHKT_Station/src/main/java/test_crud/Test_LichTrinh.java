@@ -1,3 +1,5 @@
+package test_crud;
+
 import dao.*;
 import entity.*;
 import jakarta.persistence.EntityManager;
@@ -7,7 +9,6 @@ import java.time.LocalDateTime;
 
 public class Test_LichTrinh {
     public static void main(String[] args) {
-        EntityManager em = Persistence.createEntityManagerFactory("HHKT Station").createEntityManager();
         LichTrinh_DAO lichTrinh_dao = new LichTrinh_DAO();
         CT_LichTrinh_DAO ctLichTrinh_dao = new CT_LichTrinh_DAO();
         try {
