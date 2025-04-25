@@ -1,3 +1,5 @@
+package test_crud;
+
 import dao.NhanVien_DAO;
 import dao.TaiKhoan_DAO;
 import entity.NhanVien;
@@ -7,7 +9,6 @@ import jakarta.persistence.Persistence;
 
 public class TestTaikhoan {
     public static void main(String[] args) {
-        EntityManager em = Persistence.createEntityManagerFactory("HHKT Station").createEntityManager();
         NhanVien_DAO nhanVien_dao = new NhanVien_DAO();
         TaiKhoan_DAO taiKhoan_dao = new TaiKhoan_DAO();
 
