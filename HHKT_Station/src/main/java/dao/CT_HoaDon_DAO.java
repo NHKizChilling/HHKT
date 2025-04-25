@@ -52,10 +52,16 @@ public class CT_HoaDon_DAO {
         String sql = "from ChiTietHoaDon where ve.maVe = :mave";
 
         try {
-            return em.createQuery(sql, ChiTietHoaDon.class)
+            List<ChiTietHoaDon> results = em.createQuery(sql, ChiTietHoaDon.class)
                     .setParameter("mave", maVe)
-                    .getSingleResult();
+                    .getResultList();
+            return results.isEmpty() ? null : results.getLast();
+        } catch (jakarta.persistence.NoResultException e) {
+            // Không tìm thấy kết quả
+            return null;
         } catch (Exception e) {
+            // Ghi log lỗi hoặc xử lý ngoại lệ khác
+            e.printStackTrace();
             return null;
         }
     }
@@ -66,6 +72,7 @@ public class CT_HoaDon_DAO {
         try {
             return em.createQuery(sql, ChiTietHoaDon.class)
                     .setParameter("mahd", maHD)
+                    .setMaxResults(1)
                     .getResultList();
         } catch (Exception e) {
             return null;
