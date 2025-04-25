@@ -5,6 +5,23 @@
              version="3.0">
     <persistence-unit name="HHKT Station">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>entity.NhanVien</class>
+        <class>entity.TaiKhoan</class>
+        <class>entity.LoaiTau</class>
+        <class>entity.ChuyenTau</class>
+        <class>entity.LoaiToa</class>
+        <class>entity.Toa</class>
+        <class>entity.ChoNgoi</class>
+        <class>entity.KhachHang</class>
+        <class>entity.LichTrinh</class>
+        <class>entity.ChiTietLichTrinh</class>
+        <class>entity.HoaDon</class>
+        <class>entity.ChiTietHoaDon</class>
+        <class>entity.CaLamViec</class>
+        <class>entity.KhuyenMai</class>
+        <class>entity.LoaiVe</class>
+        <class>entity.Ga</class>
+        <class>entity.Ve</class>
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=QLBanVeTau;trustServerCertificate=true"/>
@@ -13,7 +30,7 @@
             <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
 <!--            <property name="hibernate.hbm2ddl.auto" value="update"/>-->
             <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.format_sql" value="true"/>
+<!--            <property name="hibernate.format_sql" value="true"/>-->
         </properties>
     </persistence-unit>
 </persistence>
