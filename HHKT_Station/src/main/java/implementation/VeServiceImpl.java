@@ -1,8 +1,10 @@
 package implementation;
 
 import dao.Ve_DAO;
+import dto.VeDTO;
 import entity.Ve;
 import service.VeService;
+import util.VeMapper;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -16,13 +18,13 @@ public class VeServiceImpl extends UnicastRemoteObject implements VeService {
     }
 
     @Override
-    public List<Ve> getAllVe() throws RemoteException {
-        return ve_DAO.getAllVe();
+    public List<VeDTO> getAllVe() throws RemoteException {
+        return VeMapper.toDTOList(ve_DAO.getAllVe());
     }
 
     @Override
-    public Ve getVeTheoID(String maVe) throws RemoteException {
-        return ve_DAO.getVeTheoID(maVe);
+    public VeDTO getVeTheoID(String maVe) throws RemoteException {
+        return VeMapper.toDTO(ve_DAO.getVeTheoID(maVe));
     }
 
     @Override
@@ -30,8 +32,8 @@ public class VeServiceImpl extends UnicastRemoteObject implements VeService {
         return ve_DAO.getAutoGenerateID();
     }
 
-    public Ve getLaiVe() throws RemoteException {
-        return ve_DAO.getLaiVe();
+    public VeDTO getLaiVe() throws RemoteException {
+        return VeMapper.toDTO(ve_DAO.getLaiVe());
     }
 
     @Override
@@ -40,21 +42,21 @@ public class VeServiceImpl extends UnicastRemoteObject implements VeService {
     }
 
     @Override
-    public List<Ve> getDSVeTheoMaKH(String maKH) throws RemoteException {
-        return ve_DAO.getDSVeTheoMaKH(maKH);
+    public List<VeDTO> getDSVeTheoMaKH(String maKH) throws RemoteException {
+        return VeMapper.toDTOList(ve_DAO.getDSVeTheoMaKH(maKH));
     }
 
-    public List<Ve> getVeTheoTinhTrang(String tinhTrangVe) throws RemoteException {
-        return ve_DAO.getVeTheoTinhTrang(tinhTrangVe);
-    }
-
-    @Override
-    public boolean create(Ve ve) throws RemoteException {
-        return ve_DAO.create(ve);
+    public List<VeDTO> getVeTheoTinhTrang(String tinhTrangVe) throws RemoteException {
+        return VeMapper.toDTOList(ve_DAO.getVeTheoTinhTrang(tinhTrangVe));
     }
 
     @Override
-    public boolean update(Ve ve) throws RemoteException {
-        return ve_DAO.update(ve);
+    public boolean create(VeDTO ve) throws RemoteException {
+        return ve_DAO.create(VeMapper.toEntity(ve));
+    }
+
+    @Override
+    public boolean update(VeDTO ve) throws RemoteException {
+        return ve_DAO.update(VeMapper.toEntity(ve));
     }
 } 
