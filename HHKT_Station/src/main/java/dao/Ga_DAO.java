@@ -53,11 +53,13 @@ public class Ga_DAO {
         }
     }
 
-    public double KhoangCach(String maGa){
-        String sql = "Select khoangCach from Ga where maGa = :maGa";
-
+    public double KhoangCach(String maGa) {
+        String jpql = "SELECT g FROM Ga g WHERE g.maGa = :maGa";
         try {
-            return em.createQuery(sql, Ga.class).setParameter("maGa", maGa).getSingleResult().getKhoangCach();
+            Ga ga = em.createQuery(jpql, Ga.class)
+                    .setParameter("maGa", maGa)
+                    .getSingleResult();
+            return ga.getKhoangCach();
         } catch (Exception e) {
             return 0;
         }
