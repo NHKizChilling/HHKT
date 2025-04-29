@@ -12,7 +12,8 @@ import service.*;
 public class Server {
     public static void main(String[] args) throws Exception {
         Context context = new InitialContext();
-        LocateRegistry.createRegistry(7701);
+        System.setProperty("java.rmi.server.hostname", "192.168.169.147");
+        LocateRegistry.createRegistry(1099);
 
         // Khởi tạo các service
         CaLamViecService caLamViecService = new CaLamViecServiceImpl(new CaLamViec_DAO());
@@ -34,24 +35,24 @@ public class Server {
         CT_HoaDonService ctHoaDonService = new CT_HoaDonServiceImpl(new CT_HoaDon_DAO());
 
         // Bind các service vào registry
-        context.bind("rmi://localhost:7701/taiKhoanService", taiKhoanService);
-        context.bind("rmi://localhost:7701/caLamViecService", caLamViecService);
-        context.bind("rmi://localhost:7701/hoaDonService", hoaDonService);
-        context.bind("rmi://localhost:7701/nhanVienService", nhanVienService);
-        context.bind("rmi://localhost:7701/gaService", gaService);
-        context.bind("rmi://localhost:7701/khachHangService", khachHangService);
-        context.bind("rmi://localhost:7701/khuyenMaiService", khuyenMaiService);
-        context.bind("rmi://localhost:7701/lichTrinhService", lichTrinhService);
-        context.bind("rmi://localhost:7701/loaiTauService", loaiTauService);
-        context.bind("rmi://localhost:7701/loaiToaService", loaiToaService);
-        context.bind("rmi://localhost:7701/loaiVeService", loaiVeService);
-        context.bind("rmi://localhost:7701/toaService", toaService);
-        context.bind("rmi://localhost:7701/veService", veService);
-        context.bind("rmi://localhost:7701/choNgoiService", choNgoiService);
-        context.bind("rmi://localhost:7701/chuyenTauService", chuyenTauService);
-        context.bind("rmi://localhost:7701/ctLichTrinhService", ctLichTrinhService);
-        context.bind("rmi://localhost:7701/ctHoaDonService", ctHoaDonService);
+        context.bind("rmi://192.168.169.147:1099/taiKhoanService", taiKhoanService);
+        context.bind("rmi://192.168.169.147:1099/caLamViecService", caLamViecService);
+        context.bind("rmi://192.168.169.147:1099/hoaDonService", hoaDonService);
+        context.bind("rmi://192.168.169.147:1099/nhanVienService", nhanVienService);
+        context.bind("rmi://192.168.169.147:1099/gaService", gaService);
+        context.bind("rmi://192.168.169.147:1099/khachHangService", khachHangService);
+        context.bind("rmi://192.168.169.147:1099/khuyenMaiService", khuyenMaiService);
+        context.bind("rmi://192.168.169.147:1099/lichTrinhService", lichTrinhService);
+        context.bind("rmi://192.168.169.147:1099/loaiTauService", loaiTauService);
+        context.bind("rmi://192.168.169.147:1099/loaiToaService", loaiToaService);
+        context.bind("rmi://192.168.169.147:1099/loaiVeService", loaiVeService);
+        context.bind("rmi://192.168.169.147:1099/toaService", toaService);
+        context.bind("rmi://192.168.169.147:1099/veService", veService);
+        context.bind("rmi://192.168.169.147:1099/choNgoiService", choNgoiService);
+        context.bind("rmi://192.168.169.147:1099/chuyenTauService", chuyenTauService);
+        context.bind("rmi://192.168.169.147:1099/ctLichTrinhService", ctLichTrinhService);
+        context.bind("rmi://192.168.169.147:1099/ctHoaDonService", ctHoaDonService);
 
-        System.out.println("Server is running on port 7701");
+        System.out.println("Server is running on port 1099");
     }
 }
